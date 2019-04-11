@@ -13,13 +13,34 @@
 */
 
 #include "hangmanPlayer.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
 {
+  FILE *filename = fopen(word_file, "r");
+  char *line = NULL;
+  int counter = 0;
+  size_t len_of_line = 0;
 
+
+  if (filename == NULL){
+    printf("Error file not found");
+    exit(-1);
+  }
+
+  while(getline(&line, &len_of_line, filename) >= 0){
+    printf("%s", line);
+    counter++;
+  }  
+  printf("%d\n", counter);
+
+  fclose(filename);
+  //make a trie
+  //bit operations????
+  //
 }
 
 // based on the current (partially filled or intitially blank) word, guess a letter
