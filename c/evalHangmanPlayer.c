@@ -198,12 +198,12 @@ float getAccuTimeOfHangmanPlayer(char *hiddenWord, clock_t *totalCpuTimeUsed, in
       hiddenWord[i] = tolower(hiddenWord[i]); // ensure all lower case in hiddenWord 
     }
   guessWord[i] = '\0'; // terminate guessWord
-  for (; i < 26; i++)
+  for (i = 0; i < 26; i++)
     guessedLetters[i] = false;
 
   while ((isCorrectWord == false) && (numIncorrectGuesses < 6)) // no more than 6 incorrect guesses
     {
-      strcpy(guessWordCopy, guessWord); // to prevent hangman player from odifying it
+      strcpy(guessWordCopy, guessWord); // to prevent hangman player from modifying guessWord
       startTime = clock();
       letter = tolower(guess_hangman_player(guessWordCopy, isNewWord));//ask hangmanPlayer to guess
       endTime = clock();
