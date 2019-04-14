@@ -16,6 +16,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h> //tolower???
+#include <unistd.h> //sleep???
+#include "hangmanTrie.h"
+
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
@@ -25,6 +29,7 @@ void init_hangman_player(char* word_file)
   int counter = 0;
   size_t len_of_line = 0;
 
+  Trie *trie = initTrie();
 
   if (filename == NULL){
     printf("Error file not found");
@@ -32,10 +37,20 @@ void init_hangman_player(char* word_file)
   }
 
   while(getline(&line, &len_of_line, filename) >= 0){
-    // printf("%s", line);
+    // printf("before: %s", line);
+    for(int i = 0; i < strlen(line)-2; i++){
+      line[i] = tolower(line[i]);
+    }
+    // printf("after: %s", line);
+
+    insert(trie, line);
+    // sleep(1);
     counter++;
+    if(counter == 10){
+      break;
+    }
   }  
-  printf("%d\n", counter);
+  printf("%d\n", trie->nodeCount);
 
   fclose(filename);
   //make a trie
