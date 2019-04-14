@@ -32,7 +32,7 @@ void init_hangman_player(char* word_file)
   }
 
   while(getline(&line, &len_of_line, filename) >= 0){
-    printf("%s", line);
+    // printf("%s", line);
     counter++;
   }  
   printf("%d\n", counter);
