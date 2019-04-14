@@ -6,3 +6,9 @@ remove:
 
 run: 
 	./p data/words.txt data/hiddenWords1.txt 
+
+testbuild: c/hangmanPlayer.c
+	gcc -o test c/testHangman.c c/hangmanPlayer.c -lm
+
+testrun:
+	./test data/words.txt data/hiddenWords1.txt

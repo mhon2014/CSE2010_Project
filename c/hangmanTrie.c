@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define alphabetSize 26
+#define ALPHABET_SIZE 26
 
 //still using this one?
 // typedef struct{
@@ -17,7 +17,7 @@ typedef struct node{
   struct node *parent,
               *next,
               *children;
-
+            //   *children[ALPHABET_SIZE];
   unsigned int depth;
 
   bool EndOfWord
@@ -40,6 +40,9 @@ typedef struct {
 
 //SUPER ROUGH DRAFT pls don't hurt me
 
+//use array for 26 possible letters on each node
+//or linked structure?
+
 
 
 Node *node(){
@@ -61,19 +64,22 @@ Trie *initTrie(){ //initialize the trie.
 
 void insert(Trie *arg_trie, char *arg_letter){
 
+    Node *iterator = arg_trie->root; 
+
     //refactor to make it look nice pls
     for(int i = 0;i < strlen(arg_letter)-2; ++i){
 
         //if empty
-        if(arg_trie->root->children == NULL){
+        if(iterator == NULL){
             //initialise the new node
             Node *newNode = node();
             newNode->letter = arg_letter[i];
         }
+        else {
+            
+        }
         //some other conditions.....
     }
-     //to mark the end_string flag for this string
-    newNode->EndOfWord =true;
 }
 
 }
