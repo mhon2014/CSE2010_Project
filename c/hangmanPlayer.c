@@ -42,20 +42,19 @@ void init_hangman_player(char* word_file)
     for(int i = 0; i < strlen(line)-2; i++){
       line[i] = tolower(line[i]);
     }
-    printf("after: %s", line);
+    // printf("after: %s", line);
 
     insert(trie, line);
-    sleep(1);
+    // sleep(1);
     counter++;
-    if(counter == 10){
-      break;
-    }
+    // if(counter == 10){
+    //   break;
+    // }
   }  
   printf("%d\n", trie->nodeCount);
-
+  //run peak memory
   fclose(filename);
   //make a trie
-  //bit operations????
   //
 }
 
@@ -81,15 +80,27 @@ char guess_hangman_player(char* current_word, bool is_new_word)
   
   // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
 
-  for(int i = 0; i < ALPHABET_SIZE; i++){
-    if(!guessedLetters[i]){
-      printf("ascii: %d ", INDEX_TO_CHAR(i));
-      guess = INDEX_TO_CHAR(i);
-      guessedLetters[i] = true;
+  int random = rand()%ALPHABET_SIZE;
+  while(!guessedLetters[random]){
+    if(!guessedLetters[random]){
+      guessedLetters[random] = true;
+      guess = INDEX_TO_CHAR(random);
+      printf("random: %d ", random);
+      printf("ascii: %d ", INDEX_TO_CHAR(random));
       printf("character: %c\n", guess);
       break;
     }
+    random = rand()%ALPHABET_SIZE;
   }
+  // for(int i = 0; i < ALPHABET_SIZE; i++){
+  //   if(!guessedLetters[i]){
+  //     printf("ascii: %d ", INDEX_TO_CHAR(i));
+  //     guess = INDEX_TO_CHAR(i);
+  //     guessedLetters[i] = true;
+  //     printf("character: %c\n", guess);
+  //     break;
+  //   }
+  // }
   // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
   
   printf("length of the hidden word: %lu\n",strlen(current_word));
@@ -111,6 +122,8 @@ char guess_hangman_player(char* current_word, bool is_new_word)
 void feedback_hangman_player(bool is_correct_guess, char* current_word)
 { //if true we then narrow our search
   if(is_correct_guess){
+    //narrow down tree based on the correct guesses
+    //look at the current word and check which letters has been flagged
     //do some more stuff PLEASE
   }
   else {

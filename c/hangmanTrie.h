@@ -88,7 +88,7 @@ void insert(Trie *arg_trie, char *arg_word){
         //oh god this is disgusting.....
         if(!iterator->children[CHAR_TO_INDEX(arg_word[i])]){
             //initialise the new node
-            printf("parent: %c - depth: %d\n", iterator->letter, iterator->depth);
+            // printf("parent: %c - depth: %d\n", iterator->letter, iterator->depth);
             Node *newNode = node();
             newNode->parent = iterator;
             newNode->letter = arg_word[i];
