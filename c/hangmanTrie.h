@@ -38,6 +38,7 @@ typedef struct{
 typedef struct {
     Node *root;
     unsigned int nodeCount;
+    // array of nodes / depth??
     //max depth????
 }Trie;
 

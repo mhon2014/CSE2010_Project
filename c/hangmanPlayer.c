@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h> //tolower???
+#include <ctype.h> //tolower case function
 #include <unistd.h> //sleep???
 #include "hangmanTrie.h"
 
@@ -73,6 +73,10 @@ char guess_hangman_player(char* current_word, bool is_new_word)
     }
     //reset booleans
   }
+  else {
+    //prune the tree based on boolean array
+    
+  }
   char guess = ' ';
   
   // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
@@ -105,7 +109,7 @@ char guess_hangman_player(char* current_word, bool is_new_word)
 //                                   last letter needed
 // b.         false               partial word without the guessed letter
 void feedback_hangman_player(bool is_correct_guess, char* current_word)
-{
+{ //if true we then narrow our search
   if(is_correct_guess){
     //do some more stuff PLEASE
   }
