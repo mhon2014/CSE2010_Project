@@ -20,6 +20,7 @@
 #include <unistd.h> //sleep???
 #include "hangmanTrie.h"
 
+Trie *trie;
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
@@ -29,7 +30,7 @@ void init_hangman_player(char* word_file)
   int counter = 0;
   size_t len_of_line = 0;
 
-  Trie *trie = initTrie();
+  trie = initTrie();
 
   if (filename == NULL){
     printf("Error file not found");
@@ -64,10 +65,33 @@ void init_hangman_player(char* word_file)
 // returns the guessed letter
 // Assume all letters in a word are in lower case
 char guess_hangman_player(char* current_word, bool is_new_word)
-{
+{ 
+  static bool guessedLetters[ALPHABET_SIZE];
+  if (is_new_word){
+    for(int i = 0; i < ALPHABET_SIZE; i++){
+      guessedLetters[i] = false;
+    }
+    //reset booleans
+  }
   char guess = ' ';
-
   
+  // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
+
+  for(int i = 0; i < ALPHABET_SIZE; i++){
+    if(!guessedLetters[i]){
+      printf("ascii: %d ", INDEX_TO_CHAR(i));
+      guess = INDEX_TO_CHAR(i);
+      guessedLetters[i] = true;
+      printf("character: %c\n", guess);
+      break;
+    }
+  }
+  // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
+  
+  printf("length of the hidden word: %lu\n",strlen(current_word));
+  printf("word: %s\n", current_word);
+
+  // sleep(1);
   return guess;
 }
 
@@ -82,6 +106,11 @@ char guess_hangman_player(char* current_word, bool is_new_word)
 // b.         false               partial word without the guessed letter
 void feedback_hangman_player(bool is_correct_guess, char* current_word)
 {
-
+  if(is_correct_guess){
+    //do some more stuff PLEASE
+  }
+  else {
+    //cry
+  }
 }
 

@@ -4,7 +4,8 @@
 
 #define ALPHABET_SIZE 26
 
-#define INDEX(x) ((int)x - (int)'a')
+#define CHAR_TO_INDEX(x) ((int)x - (int)'a')
+#define INDEX_TO_CHAR(x) (char)((int)x + (int)'a')
 
 //still using this one?
 // typedef struct{
@@ -78,26 +79,19 @@ void insert(Trie *arg_trie, char *arg_word){
     for(int i = 0;i < strlen(arg_word)-2; ++i){
         //if empty
         //oh god this is disgusting.....
-        if(!iterator->children[INDEX(arg_word[i])]){
+        if(!iterator->children[CHAR_TO_INDEX(arg_word[i])]){
             //initialise the new node
             // printf("parent: %c - depth: %d\n", iterator->letter, iterator->depth);
             Node *newNode = node();
             newNode->parent = iterator;
             newNode->letter = arg_word[i];
             newNode->depth = i+1;
-            iterator->children[INDEX(arg_word[i])] = newNode;
+            iterator->children[CHAR_TO_INDEX(arg_word[i])] = newNode;
             arg_trie->nodeCount++;
         }
-        iterator = iterator->children[INDEX(arg_word[i])];
+        iterator = iterator->children[CHAR_TO_INDEX(arg_word[i])];
         // printf("letter: %c\n", iterator->letter);
 
         iterator->EndOfWord = true;
     }
 }
-
-// void BFS(Trie *arg_trie){
-//     int head = 0,
-//         tail = 0,
-//     Node *queue[26];
-//     Node *iterator = arg_trie->root;
-// }
