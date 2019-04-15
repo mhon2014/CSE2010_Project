@@ -27,6 +27,8 @@ typedef struct node{
               *children[ALPHABET_SIZE];
   unsigned int depth;
 
+  bool path; //for searching path
+
   bool EndOfWord;
 
 }Node;
@@ -59,13 +61,13 @@ Node *node(){
     newNode->parent = NULL;
     // newNode->children = NULL;
     newNode->depth = 0;
+    newNode->path = true;
     newNode->EndOfWord = false;
     for(int i = 0; i < ALPHABET_SIZE; i++){
         newNode->children[i] = NULL;
     } //I don't like this AT ALL
     return newNode;
 }
-
 
 Trie *initTrie(){ //initialize the trie.
     Trie *newTrie = (Trie*)malloc(sizeof(Trie));
