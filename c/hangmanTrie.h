@@ -13,6 +13,10 @@
 //     bool path;
 // }edge;
 
+
+//suppose to be function defintions only but I got lazy
+
+
 typedef struct node{
 
   char letter;

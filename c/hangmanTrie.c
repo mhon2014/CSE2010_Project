@@ -6,6 +6,9 @@
 
 #define INDEX(x) ((int)x - (int)'a')
 
+//EVERYTHING HERE IS TRASH
+//Suppose to be implementation only
+
 //still using this one?
 // typedef struct{
 //     struct node *children;
