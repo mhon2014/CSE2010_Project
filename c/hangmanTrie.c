@@ -12,6 +12,7 @@
 //     bool path;
 // }edge;
 
+//node definition
 typedef struct node{
 
   char letter;
@@ -34,6 +35,7 @@ typedef struct{
     unsigned int size;
 }List;
 
+//struct of the trie object
 typedef struct {
     Node *root;
     unsigned int nodeCount;
@@ -46,7 +48,7 @@ typedef struct {
 //or linked structure?
 
 
-
+//create node and set all the values
 Node *node(){
     Node *newNode = (Node*)malloc(sizeof(Node));
     // newNode->letter = NULL;
