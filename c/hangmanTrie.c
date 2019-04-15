@@ -27,7 +27,7 @@ typedef struct node{
 
 }Node;
 
-//DLL, not used yet
+//DLL, not used yet, need different node
 typedef struct{
     Node *head,
          *tail;
@@ -39,6 +39,9 @@ typedef struct{
 typedef struct {
     Node *root;
     unsigned int nodeCount;
+
+    // array of linkedlist / depth??
+    //how tf do we do this?
     //max depth????
 }Trie;
 

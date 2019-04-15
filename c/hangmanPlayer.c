@@ -42,10 +42,10 @@ void init_hangman_player(char* word_file)
     for(int i = 0; i < strlen(line)-2; i++){
       line[i] = tolower(line[i]);
     }
-    // printf("after: %s", line);
+    printf("after: %s", line);
 
     insert(trie, line);
-    // sleep(1);
+    sleep(1);
     counter++;
     if(counter == 10){
       break;
