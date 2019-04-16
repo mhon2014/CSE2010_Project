@@ -20,24 +20,27 @@
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
 {
-  FILE *filename = fopen(word_file, "r");
-  char *line = NULL;
-  int counter = 0;
-  size_t len_of_line = 0;
+
+  FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
+  char *line = NULL;                       // stores each line from input file
+  int counter = 0;                         // tracks number of words read
+  size_t len_of_line = 0;				   //length of word read
 
 
-  if (filename == NULL){
+  // verify file opened properly
+  if (file_ptr == NULL) {
     printf("Error file not found");
     exit(-1);
   }
 
-  while(getline(&line, &len_of_line, filename) >= 0){
+
+  while(getline(&line, &len_of_line, file_ptr) >= 0){
     printf("%s", line);
     counter++;
   }  
   printf("%d\n", counter);
 
-  fclose(filename);
+  fclose(file_ptr);
   //make a trie
   //bit operations????
   //
