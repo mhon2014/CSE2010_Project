@@ -20,11 +20,11 @@
 #include <unistd.h> //sleep???
 #include "hangmanTrie.h"
 
-Trie *trie;
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
 {
+  static Trie *trie;
   FILE *filename = fopen(word_file, "r");
   char *line = NULL;
   int counter = 0;
@@ -42,7 +42,7 @@ void init_hangman_player(char* word_file)
     for(int i = 0; i < strlen(line)-2; i++){
       line[i] = tolower(line[i]);
     }
-    // printf("after: %s", line);
+    printf("after: %s", line);
 
     insert(trie, line);
     // sleep(1);
@@ -74,6 +74,7 @@ char guess_hangman_player(char* current_word, bool is_new_word)
   }
   else {
     //prune the tree based on boolean array
+    //search tree or use the tree depth nodes
     
   }
   char guess = ' ';
@@ -85,9 +86,9 @@ char guess_hangman_player(char* current_word, bool is_new_word)
     if(!guessedLetters[random]){
       guessedLetters[random] = true;
       guess = INDEX_TO_CHAR(random);
-      printf("random: %d ", random);
-      printf("ascii: %d ", INDEX_TO_CHAR(random));
-      printf("character: %c\n", guess);
+      // printf("random: %d ", random);
+      // printf("ascii: %d ", INDEX_TO_CHAR(random));
+      // printf("character: %c\n", guess);
       break;
     }
     random = rand()%ALPHABET_SIZE;
@@ -103,8 +104,8 @@ char guess_hangman_player(char* current_word, bool is_new_word)
   // }
   // for(int i = 0; i < ALPHABET_SIZE; i++) printf("Bool: %d\n",guessedLetters[i]);
   
-  printf("length of the hidden word: %lu\n",strlen(current_word));
-  printf("word: %s\n", current_word);
+  // printf("length of the hidden word: %lu\n",strlen(current_word));
+  // printf("word: %s\n", current_word);
 
   // sleep(1);
   return guess;

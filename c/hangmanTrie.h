@@ -34,18 +34,18 @@ typedef struct node{
 }Node;
 
 //DLL, not used yet
-typedef struct{
-    Node *head,
-         *tail;
+// typedef struct{
+//     Node *head,
+//          *tail;
 
-    unsigned int size;
-}List;
+//     unsigned int size;
+// }List;
 
 typedef struct {
     Node *root;
     unsigned int nodeCount;
     // array of nodes / depth??
-    //max depth????
+    unsigned int maxDepth;
 }Trie;
 
 //SUPER ROUGH DRAFT pls don't hurt me
@@ -73,13 +73,14 @@ Trie *initTrie(){ //initialize the trie.
     Trie *newTrie = (Trie*)malloc(sizeof(Trie));
     newTrie->root = node();
     newTrie->nodeCount = 1;
+    newTrie->maxDepth = 0;
     return newTrie;
 }
 
 void insert(Trie *arg_trie, char *arg_word){
 
     Node *iterator = arg_trie->root; 
-    // printf("\nlength: %lu - ASCII value: %d - word: %s \n", strlen(arg_word)-2, arg_word[0], arg_word);
+    printf("\nlength: %lu - ASCII value: %d - word: %s \n", strlen(arg_word)-2, arg_word[0], arg_word);
 
     // return;
     //refactor to make it look nice pls
