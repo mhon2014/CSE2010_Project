@@ -1,5 +1,5 @@
 termProject: c/evalHangmanPlayer.c c/hangmanPlayer.c
-	gcc -o p c/evalHangmanPlayer.c c/hangmanPlayer.c -lm
+	gcc -ggdb -o p c/evalHangmanPlayer.c c/hangmanPlayer.c -lm
 
 remove: 
 	rm ./p
