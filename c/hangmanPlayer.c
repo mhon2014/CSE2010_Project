@@ -20,9 +20,9 @@
 #include <unistd.h> //sleep???
 #include "hangmanTrie.h"
 
-typedef struct node{
+typedef struct wnode{
   char *word;
-  struct node *next;
+  struct wnode *next;
 }wordnode;
 
 typedef struct{
