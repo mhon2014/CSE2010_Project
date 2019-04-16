@@ -22,6 +22,7 @@
 Trie *trie;
 static bool guessedLetters[ALPHABET_SIZE];
 char guess;
+PtrNode* letter_ptrs[26]; // stores list of locations for each letter
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
@@ -31,7 +32,6 @@ void init_hangman_player(char* word_file) {
   char *line = NULL;                       // stores each from input file
   int counter = 0;                         // tracks number of words read
   size_t len_of_line = 0;				           //length of word read
-
 
   // verify file opened properly
   if (file_ptr == NULL) {
@@ -110,8 +110,8 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
                 // go up to its parent
                 // for each other child
                         // mark bad it and its ancestors
-        
-  }
+
+  } // end if "correct guess"
 
   else {
 

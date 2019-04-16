@@ -38,4 +38,4 @@ typedef struct PtrNode {
 AlphaNode* new_alpha_node(); // initialize and return a new alpha node
 Trie *init_trie(); //initialize and return a new trie
 void insert(Trie *arg_trie, char *arg_word); // inserts given word into given trie
-void eliminate_ancestors(char bad_letter); // eliminate all paths that start with/ follow from the incorrect guess
+void eliminate_descendants(char bad_letter); // eliminate all paths that start with/ follow from the incorrect guess
