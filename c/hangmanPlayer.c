@@ -105,9 +105,12 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   if (is_correct_guess) {
 
       // find all positions in current word
-      /// for each character in word that matches guess
-
-    
+      /// for each position that the letter occurs
+          /// for each instance of letter in that position
+                // go up to its parent
+                // for each other child
+                        // mark bad it and its ancestors
+        
   }
 
   else {
