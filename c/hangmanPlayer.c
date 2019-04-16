@@ -20,17 +20,28 @@
 #include <unistd.h> //sleep???
 #include "hangmanTrie.h"
 
+typedef struct node{
+  char *word;
+  struct node *next;
+}wordnode;
+
+typedef struct{
+  wordnode *head, *tail;
+  unsigned int size;
+}list;
+
+static list *wordlist[24];
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file)
 {
-  static Trie *trie;
+  // static Trie *trie;
   FILE *filename = fopen(word_file, "r");
   char *line = NULL;
   int counter = 0;
   size_t len_of_line = 0;
 
-  trie = initTrie();
+  // trie = initTrie();
 
   if (filename == NULL){
     printf("Error file not found");
@@ -38,20 +49,32 @@ void init_hangman_player(char* word_file)
   }
 
   while(getline(&line, &len_of_line, filename) >= 0){
-    // printf("before: %s", line);
-    for(int i = 0; i < strlen(line)-2; i++){
-      line[i] = tolower(line[i]);
+    if (!wordlist[counter]){
+      wordlist[counter] = (list*)malloc(sizeof(list));
     }
-    printf("after: %s", line);
+    if(wordlist[counter]->size == 0){
+      wordlist[counter]->head = (wordnode*)malloc(sizeof(wordnode));
+      wordlist[counter]->tail = wordlist[counter]->head;
+    }
+    else {
+      wordlist[counter]->tail->next = (wordnode*)malloc(sizeof(wordnode));
+      wordlist[counter]->tail = wordlist[counter]->tail->next;
+      strcpy(wordlist[counter]->tail->word, line);
+    }
+    // printf("before: %s", line);
+    // for(int i = 0; i < strlen(line)-2; i++){
+    //   line[i] = tolower(line[i]);
+    // }
+    // printf("after: %s", line);
 
-    insert(trie, line);
+    // insert(trie, line);
     // sleep(1);
-    counter++;
+    // counter++;
     // if(counter == 10){
     //   break;
     // }
   }  
-  printf("%d\n", trie->nodeCount);
+  // printf("%d\n", trie->nodeCount);
   //run peak memory
   fclose(filename);
   //make a trie
