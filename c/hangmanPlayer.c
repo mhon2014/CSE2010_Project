@@ -107,9 +107,6 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
       // find all positions in current word
       /// for each character in word that matches guess
 
-
-
-      //
     
   }
 
