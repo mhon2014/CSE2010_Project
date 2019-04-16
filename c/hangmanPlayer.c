@@ -21,6 +21,7 @@
 // global declarations
 Trie *trie;
 static bool guessedLetters[ALPHABET_SIZE];
+char guess;
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
@@ -65,7 +66,7 @@ void init_hangman_player(char* word_file) {
 char guess_hangman_player(char* current_word, bool is_new_word) {
 
   // variable declarations
-  char guess = ' ';
+  guess = ' ';
   
   // reset guesses if new word
   if (is_new_word) {
@@ -102,8 +103,9 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
 
   else {
 
-    // eliminate all paths with guessed letter in ANY position
-
+    char bad_letter = guess;
+    eliminate_ancestors(bad_letter); // prune tree after bad guess
+  
   }
 
 } // end feedback
@@ -176,3 +178,18 @@ void insert(Trie *arg_trie, char *arg_word) {
     return;
 
 } // end insert function
+
+// eliminate all paths that start with/ follow from the incorrect guess
+void eliminate_ancestors(char bad_letter) {
+
+  // recursively go through tree
+
+  // for every node equal to bad_letter
+
+      // mark is_candidate false
+
+      // mark all ancestors with is_candidate false
+
+  return;
+
+} // close eliminate_ancestors
