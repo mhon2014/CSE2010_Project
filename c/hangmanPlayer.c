@@ -76,11 +76,16 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   }
 
 
-  // formulate next guess
+  /// go through all possible paths
 
+    /// if you find a !(is_candidate), that path is bad so stop searching it 
+    /// if you get to the end of path and it's all good
+            /// go all the way up that path and increment a 
+            /// "words with that letter in them" counter for every letter you find
 
+  /// quess = most frequent letter
 
-  // update guess_letters
+  // update guess_letters array with the letter we're going to guess
 
   return guess;
 }
@@ -96,9 +101,16 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
 // b.         false               partial word without the guessed letter
 void feedback_hangman_player(bool is_correct_guess, char* current_word) {
 
+  // limit to paths with guessed letter in revealed position
   if (is_correct_guess) {
 
-    // limit to paths with guessed letter in revealed position
+      // find all positions in current word
+      /// for each character in word that matches guess
+
+
+
+      //
+    
   }
 
   else {
@@ -184,11 +196,11 @@ void eliminate_ancestors(char bad_letter) {
 
   // recursively go through tree
 
-  // for every node equal to bad_letter
+  /// for every node equal to bad_letter (i.e. every ptr in "b" list)
+  
+      /// mark is_candidate false
 
-      // mark is_candidate false
-
-      // mark all ancestors with is_candidate false
+      /// mark all ancestors with is_candidate false
 
   return;
 
