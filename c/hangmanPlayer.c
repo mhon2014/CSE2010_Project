@@ -15,20 +15,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "hangmanPlayer.h"
-#include "hangmanTrie.h"
 #include <ctype.h>
 #include <unistd.h>
+#include "hangmanPlayer.h"
 #include "utils/sllist.h"
+#include "utils/trie.h"
 
 
 #define MAX_LENGTH 32
 
 // global declarations
 Trie *trie;
-static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
 char guess = 'e';
 SLList* letter_ptrs[ALPHABET_SIZE]; // stores list of locations for each letter
+static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
+
+
+
+
+
+
+
+
+
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
@@ -69,6 +78,15 @@ void init_hangman_player(char* word_file) {
 
 } // end init_hangman_player
 
+
+
+
+
+
+
+
+
+
 // based on the current (partially filled or intitially blank) word, guess a letter
 // current_word: current word -- may contain blanks, terminated by a null char as usual
 // is_new_word: indicates a new hidden word (current_word has blanks)
@@ -83,11 +101,11 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
     for(int i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
   }
 
-  guessedLetters[CHAR_TO_INDEX('e')] = true;
-  guess = ((AlphaNode*)highestFreqLetter(trie, letter_ptrs, guessedLetters)->head->data)->letter;
+  // guessedLetters[CHAR_TO_INDEX('e')] = true;
+  guess = ((AlphaNode*)highestFreqLetter(trie, letter_ptrs, guessedLetters, strlen(current_word))->head->data)->letter;
   printf("guessed %c\n", guess);
   for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-    printf("%c has %d refs\n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
+    printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
   }
   scanf(" ");
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
@@ -106,6 +124,23 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
 
   return guess;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // feedback on the guessed letter
 // is_correct_guess: true if the guessed letter is one of the letters in the hidden word

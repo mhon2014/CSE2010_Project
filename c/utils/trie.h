@@ -1,7 +1,10 @@
+#ifndef TRIE_H
+#define TRIE_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "utils/sllist.h"
+#include "sllist.h"
 
 #define ALPHABET_SIZE 26
 
@@ -43,9 +46,9 @@ AlphaNode* new_alpha_node(); // initialize and return a new alpha node
 Trie *init_trie(); //initialize and return a new trie
 void insertTrie(Trie *arg_trie, char *arg_word); // inserts given word into given trie
 void eliminate_paths(Trie* trie, SLList** letter_freq, char bad_letter); // eliminate all paths that start with/ follow from the incorrect guess
-SLList* highestFreqLetter(Trie* trie, SLList **letter_freq, bool* guessLetters);
+SLList* highestFreqLetter(Trie* trie, SLList **letter_freq, bool* guessLetters, byte word_len);
 // PtrNode* initNode(AlphaNode* data); 
-void preOrder(AlphaNode* root, SLList** letter_freq);
+void preOrder(AlphaNode* root, SLList** letter_freq, byte word_len);
 void insort(SLList* List,  void* data);
 void elimDown(AlphaNode* root); // eliminate path down
 void elimUp(AlphaNode* root); // eliminate path up
@@ -151,13 +154,13 @@ void elimDown(AlphaNode* root) { // root included
         elimDown(root->children[i]);
 }
 
-SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters) {
+SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters, byte word_len) {
     printf("Guessing... \n");
     AlphaNode* start = trie->root;
     byte max = 0;
 
     for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-        preOrder(start->children[i], letter_freq);
+        preOrder(start->children[i], letter_freq, word_len);
     }
 
     for(byte i = 0; i < ALPHABET_SIZE; ++i) {
@@ -169,14 +172,15 @@ SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters
     return letter_freq[max];
 }
 
-void preOrder(AlphaNode* root, SLList** letter_freq) {
+void preOrder(AlphaNode* root, SLList** letter_freq, byte word_len) {
     if(root == NULL) return;
+    if(root->depth > word_len) return;
     if(root->is_candidate) {
         printf(" curr node: %c  number: %d\n", root->letter, counter++);
         insort(letter_freq[CHAR_TO_INDEX(root->letter)], root);
     }
     for(uint i = 0; i < ALPHABET_SIZE; ++i) {
-        preOrder(root->children[i], letter_freq);
+        preOrder(root->children[i], letter_freq, word_len);
     }
 }
 
@@ -234,3 +238,6 @@ bool isChineseNode(AlphaNode* root) { // sorry Mr Chan
     }
     return (counter == 1);
 }
+
+
+#endif // TRIE_H  
