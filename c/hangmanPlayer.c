@@ -83,11 +83,15 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
     for(int i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
   }
 
-
+  guessedLetters[CHAR_TO_INDEX('e')] = true;
   guess = ((AlphaNode*)highestFreqLetter(trie, letter_ptrs, guessedLetters)->head->data)->letter;
   printf("guessed %c\n", guess);
-  // scanf(" ");
+  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+    printf("%c has %d refs\n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
+  }
+  scanf(" ");
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
+  
 
   /// go through all possible paths
 

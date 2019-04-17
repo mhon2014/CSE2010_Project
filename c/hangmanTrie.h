@@ -6,7 +6,7 @@
 #define ALPHABET_SIZE 26
 
 #define CHAR_TO_INDEX(x) ((int)x - (int)'a') 
-// #define INDEX_TO_CHAR(x) (char)((int)x + (int)'a')
+#define INDEX_TO_CHAR(x) (char)((int)x + (int)'a')
 
 // node in the trie
 int counter = 0;
