@@ -19,18 +19,23 @@
 #include "hangmanTrie.h"
 #include <ctype.h>
 #include <unistd.h>
+#include "utils/sllist.h"
 
 
 #define MAX_LENGTH 32
 
 // global declarations
 Trie *trie;
-static bool guessedLetters[ALPHABET_SIZE];
-char guess;
-PtrNode* letter_ptrs[26]; // stores list of locations for each letter
+static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
+char guess = 'e';
+SLList* letter_ptrs[ALPHABET_SIZE]; // stores list of locations for each letter
 
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
+
+  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+    letter_ptrs[i] = initList();
+  }
 
   // variable declarations
   FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
@@ -50,9 +55,9 @@ void init_hangman_player(char* word_file) {
   // insert elements into trie
   while(fscanf(file_ptr, " %s", line) != EOF) {
     line[0] = tolower(line[0]);
-    printf("%s\n", line); // for testing
-    sleep(1);
-    insert(trie, line); // insert word into trie
+    // printf("%s\n", line); // for testing
+    // sleep(1);
+    insertTrie(trie, line); // insert word into trie
     // counter++; // increment number of words
 
   }  
@@ -72,15 +77,17 @@ void init_hangman_player(char* word_file) {
 char guess_hangman_player(char* current_word, bool is_new_word) {
 
   // variable declarations
-  guess = ' ';
   
   // reset guesses if new word
   if (is_new_word) {
-    for(int i = 0; i < ALPHABET_SIZE; i++){
-      guessedLetters[i] = false;
-    }
+    for(int i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
   }
 
+
+  guess = ((AlphaNode*)highestFreqLetter(trie, letter_ptrs, guessedLetters)->head->data)->letter;
+  printf("guessed %c\n", guess);
+  // scanf(" ");
+  guessedLetters[CHAR_TO_INDEX(guess)] = true;
 
   /// go through all possible paths
 
@@ -120,10 +127,8 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   } // end if "correct guess"
 
   else {
-
     char bad_letter = guess;
-    // eliminate_ancestors(bad_letter); // prune tree after bad guess
-  
+    eliminate_paths(trie, letter_ptrs, bad_letter); // prune tree after bad guess
   }
 
 } // end feedback
