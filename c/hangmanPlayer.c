@@ -107,13 +107,13 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   }
 
   // guessedLetters[CHAR_TO_INDEX('e')] = true;
-  guess = ((AlphaNode*)highestFreqLetter(trie, letter_ptrs, guessedLetters, strlen(current_word))->head->data)->letter;
-  printf("guessed %c\n", guess);
-  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-    printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
-  }
-  scanf(" ");
-  guessedLetters[CHAR_TO_INDEX(guess)] = true;
+  // guess = ((ANode*)highestFreqLetter(trie, letter_ptrs, guessedLetters, strlen(current_word))->head->data)->letter;
+  // printf("guessed %c\n", guess);
+  // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+  //   printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
+  // }
+  // scanf(" ");
+  // guessedLetters[CHAR_TO_INDEX(guess)] = true;
   
 
   /// go through all possible paths

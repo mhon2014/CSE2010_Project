@@ -164,25 +164,25 @@ void insert(SLList* List,  uint index, void* data) {
 
 
 /* insert a node with data at index */
-// void insort(SLList* List,  void* data) {
-//     Node* new_node = initNode(data);
-//     if(List->size == 0) { //case 1: empty list
-//         List->head = new_node;
-//         new_node->next = NULL;
-//     } 
-//     else if(strcmp((char*)List->head->data, (char*)data) > 0) { // inserting before the head
-//         new_node->next = List->head;
-//         List->head = new_node;
-//     }   
-//     else { // case 3: insert sort
-//         Node* prev = NULL;
-//         for(prev = List->head; strcmp((char*)prev->next->data, (char*)data) < 0; prev = prev->next);
-//         new_node->next = prev->next;
-//         prev->next = new_node;
-//     }
+void insort(SLList* List,  void* data) {
+    Node* new_node = initNode(data);
+    if(List->size == 0) { //case 1: empty list
+        List->head = new_node;
+        new_node->next = NULL;
+    } 
+    else if(strcmp((char*)List->head->data, (char*)data) > 0) { // inserting before the head
+        new_node->next = List->head;
+        List->head = new_node;
+    }   
+    else { // case 3: insert sort
+        Node* prev = NULL;
+        for(prev = List->head; strcmp((char*)prev->next->data, (char*)data) < 0; prev = prev->next);
+        new_node->next = prev->next;
+        prev->next = new_node;
+    }
 
-//     ++List->size;
-// }
+    ++List->size;
+}
 
 /* insert node at the front of the list */
 void pushfront(SLList* List, void* data) {
