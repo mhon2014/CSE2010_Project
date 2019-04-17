@@ -1,14 +1,19 @@
 /*
 
-  Authors (group members):
+  Authors (group members): 
+  Josias Moukpe 
   Email addresses of group members:
-  Group name:
-
-  Course:
-  Section:
+  jmoukpe2016@my.fit.edu
+  Group name: Fantastic For(int i = 0; i < 4; ++i)
+  Course: cse2010
+  Section: 14b
 
   Description of the overall algorithm:
-
+  builds multiple tries for base on the length of the words
+  all tries are stored in BST with key the word length
+  Guess base on the  most frequent letter in the appropriate trie
+  correct guesses would prune the trie of all the path not containing the guessed letters
+  incorrect guesses would prune the trie of the path containing the guessed letter
 
 */
 
