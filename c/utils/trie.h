@@ -56,6 +56,7 @@ void elimDown(ANode* root); // eliminate path down
 void elimUp(ANode* root); // eliminate path up
 bool isChineseNode(ANode* root); // return true if only one child
 ANode* findAnode(SLList* children, char letter);
+void resetPaths(ANode* root);
  
 // initialize and return a new alpha node
 ANode* init_anode(char val) {
@@ -289,5 +290,15 @@ ANode* findAnode(SLList* children, char letter) {
     return NULL;
 }
 
-
+void resetPaths(ANode* root) {
+    if(root == NULL) return;
+    root->is_candidate = true;
+    // for(uint i = 0; i < ALPHABET_SIZE; ++i) {
+    //     preOrder(root->children[i], letter_freq, word_len);
+    // }
+    for(Node* cursor = root->children->head; cursor != NULL; cursor = cursor->next) {
+        ANode *child = (ANode*)cursor->data;
+        resetPaths(child);
+    }
+}
 #endif // TRIE_H  

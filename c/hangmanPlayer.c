@@ -22,6 +22,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <time.h>
 #include "hangmanPlayer.h"
 #include "utils/sllist.h"
 #include "utils/trie.h"
@@ -104,16 +105,21 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   // reset guesses if new word
   if (is_new_word) {
     for(int i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
+    /// call reset on the trie to be used
   }
 
-  // guessedLetters[CHAR_TO_INDEX('e')] = true;
-  // guess = ((ANode*)highestFreqLetter(trie, letter_ptrs, guessedLetters, strlen(current_word))->head->data)->letter;
-  // printf("guessed %c\n", guess);
-  // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-  //   printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
-  // }
-  // scanf(" ");
-  // guessedLetters[CHAR_TO_INDEX(guess)] = true;
+  guessedLetters[CHAR_TO_INDEX('e')] = true;
+  clock_t st,end;
+  st = clock();
+  guess = ((ANode*)highestFreqLetter(trie, letter_ptrs, guessedLetters, strlen(current_word))->head->data)->letter;
+  end = clock();
+
+  printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
+  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+    printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
+  }
+  scanf(" ");
+  guessedLetters[CHAR_TO_INDEX(guess)] = true;
   
 
   /// go through all possible paths
