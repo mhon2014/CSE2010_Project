@@ -47,14 +47,14 @@ ANode* init_anode(char a); // initialize and return a new alpha node
 Trie *init_trie(); //initialize and return a new trie
 void insertTrie(Trie *arg_trie, char *arg_word); // inserts given word into given trie
 void eliminate_paths(Trie* trie, SLList** letter_freq, char bad_letter); // eliminate all paths that start with/ follow from the incorrect guess
-SLList* highestFreqLetter(Trie* trie, SLList **letter_freq, bool* guessLetters, byte word_len);
+char highestFreqLetter(Trie* trie, SLList **letter_freq, bool* guessLetters);
 // PtrNode* initNode(ANode* data); 
-void preOrder(ANode* root, SLList** letter_freq, byte word_len);
+void preOrder(ANode* root, SLList** letter_freq);
 void insortAnode(SLList* List,  void* data);
 void insortAnodeAlph(SLList* List,  void* data);
 void elimDown(ANode* root); // eliminate path down
 void elimUp(ANode* root); // eliminate path up
-bool isChineseNode(ANode* root); // return true if only one child
+bool hasOneChild(ANode* root); // return true if only one child
 ANode* findAnode(SLList* children, char letter);
 void resetPaths(ANode* root);
  
@@ -142,7 +142,7 @@ void eliminate_paths(Trie* trie, SLList** letter_freq, char bad_letter) {
 
 void elimUp(ANode* root) { // root not included
     for(ANode* tmp = root->parent; tmp->letter != '#'; tmp = tmp->parent) {
-        if(!isChineseNode(tmp)) break;
+        if(!hasOneChild(tmp)) break;
         tmp->is_candidate = false;
     }
 }
@@ -160,8 +160,8 @@ void elimDown(ANode* root) { // root included
     }
 }
 
-SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters, byte word_len) {
-    printf("Guessing... \n");
+char highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters) {
+    // printf("Guessing... \n");
     // ANode* start = trie->root;
     byte max = 0;
 
@@ -170,7 +170,7 @@ SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters
     // }
     for(Node* cursor = trie->root->children->head; cursor != NULL; cursor = cursor->next) {
         ANode *child = (ANode*)cursor->data;
-        preOrder(child, letter_freq, word_len);
+        preOrder(child, letter_freq);
     }
 
     // return max freq letter
@@ -180,14 +180,14 @@ SLList* highestFreqLetter(Trie* trie, SLList** letter_freq, bool* guessedLetters
         }
     }
 
-    return letter_freq[max];
+    return INDEX_TO_CHAR(max);
 }
 
-void preOrder(ANode* root, SLList** letter_freq, byte word_len) {
+void preOrder(ANode* root, SLList** letter_freq) {
     if(root == NULL) return;
-    if(root->depth > word_len) return;
+    // if(root->depth > word_len) return;
     if(root->is_candidate) {
-        printf(" curr node: %c  number: %d\n", root->letter, counter++);
+        // printf(" curr node: %c  number: %d\n", root->letter, counter++);
         insortAnode(letter_freq[CHAR_TO_INDEX(root->letter)], root);
     }
     // for(uint i = 0; i < ALPHABET_SIZE; ++i) {
@@ -195,7 +195,7 @@ void preOrder(ANode* root, SLList** letter_freq, byte word_len) {
     // }
     for(Node* cursor = root->children->head; cursor != NULL; cursor = cursor->next) {
         ANode *child = (ANode*)cursor->data;
-        preOrder(child, letter_freq, word_len);
+        preOrder(child, letter_freq);
     }
 }
 
@@ -273,7 +273,7 @@ void insortAnodeAlph(SLList* List,  void* data) {
     ++List->size;
 }
 
-bool isChineseNode(ANode* root) { // sorry Mr Chan
+bool hasOneChild(ANode* root) { // sorry Mr Chan
     // byte counter = 0;
     // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
     //     if(root->children[i] != NULL) ++counter;

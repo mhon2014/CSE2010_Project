@@ -36,10 +36,10 @@
 // Trie *trie;
 Trie **tries;
 byte N_TRIES;
-char guess = 'e';
+char guess;
 SLList* letter_ptrs[ALPHABET_SIZE]; // stores list of locations for each letter
 static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
-
+char *prev_str = "\0";
 
 
 /******************************************************************************
@@ -59,12 +59,14 @@ byte max_len(char* word_file) {
 
   while(fscanf(file_ptr, " %s", line) != EOF) {
     byte wordlen = strlen(line);
+    // printf("strlen = %d\n", wordlen);
     if(wordlen > maxlen) maxlen = wordlen;
   }  
 
   // printf("Number of words: %d\n", trie->nodeCount); // for testing
   fclose(file_ptr);
   return maxlen;
+
 }
 
 
@@ -95,13 +97,12 @@ void init_hangman_player(char* word_file) {
   // insert elements into trie
   while(fscanf(file_ptr, " %s", line) != EOF) {
     line[0] = tolower(line[0]);
-    // printf("%s\n", line); // for testing
-    // sleep(1);
-    insertTrie(tries[strlen(line) - 1], line); // insert word into trie
-    // counter++; // increment number of words
+    if(!strcmp(line, prev_str)) continue; // skip duplicates
+    insertTrie(tries[(byte)strlen(line) - 1], line); // insert word into trie
   }  
 
-  // printf("Number of words: %d\n", trie->nodeCount); // for testing
+  // for(byte i = 0; i < N_TRIES; ++i)
+  // printf("Number of words in trie %d : %d\n", i, tries[i]->nodeCount); // for testing
   fclose(file_ptr);
 
   return;
@@ -128,17 +129,19 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   byte curr_word_len = strlen(current_word);
   // reset guesses if new word
   if (is_new_word) {
-    for(int i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
+    for(byte i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
+    resetPaths(tries[curr_word_len - 1]->root);
+    printf("new word\n");
     /// call reset on the trie to be used
   }
 
-  guessedLetters[CHAR_TO_INDEX('e')] = true;
-  // clock_t st,end;
-  // st = clock();
-  guess = ((ANode*)highestFreqLetter(tries[curr_word_len], letter_ptrs, guessedLetters, curr_word_len)->head->data)->letter;
-  // end = clock();
+  // guessedLetters[CHAR_TO_INDEX('e')] = true;
+  clock_t st,end;
+  st = clock();
+  guess = highestFreqLetter(tries[curr_word_len - 1], letter_ptrs, guessedLetters);
+  end = clock();
 
-  // printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
+  printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
   // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
   //   printf("%c has %d refs \n", INDEX_TO_CHAR(i), letter_ptrs[i]->size);
   // }
