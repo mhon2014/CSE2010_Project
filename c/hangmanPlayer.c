@@ -40,9 +40,10 @@
 SLList** words;
 byte N_LIST;
 char guess;
-byte letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
-static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
+uint letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
+bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
 char prev_str[MAX_LENGTH] = "\0";
+byte counter = 0;
 
 
 // byte max_len(char* word_file);
@@ -88,6 +89,7 @@ void init_hangman_player(char* word_file) {
 
   // variable declarations
   FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
+  FILE *output = fopen("output.txt", "w");
   char line[MAX_LENGTH];                       // stores each from input file
 
   // verify file opened properly
@@ -104,14 +106,27 @@ void init_hangman_player(char* word_file) {
     
     line[0] = tolower(line[0]);
     if(!strcmp(line, prev_str)) continue; // skip duplicates
-    printf("inserting %s\n", line);
     Word* new_word = initWord(line);
     pushfront(words[strlen(line) - 1], new_word);
     strcpy(prev_str, line);
+
   }  
 
-  // for(byte i = 0; i < N_TRIES; ++i)
-  // printf("Number of words in trie %d : %d\n", i, tries[i]->nodeCount); // for testing
+  // byte i = CHAR_TO_INDEX('z');
+  // char c = INDEX_TO_CHAR(0);
+
+  // char z = 'z';
+  for(byte i = 0; i < N_LIST; ++i)
+    printf("Number of words in trie %d : %d\n", i, words[i]->size); // for testing
+
+
+  // for(Node* cursor = words[13]->head; cursor != NULL; cursor = cursor->next) {
+  //   Word *w = (Word*)cursor->data;
+  //   fprintf(output, "%s\n", w->val); 
+  //   printf("%s\n", w->val);
+  // }
+
+  fclose(output);
   fclose(file_ptr);
 
   // printf("size of DS %ld\n", sizeof(words));
@@ -139,11 +154,16 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   byte curr_word_len = strlen(current_word);
   // reset guesses if new word
   if (is_new_word) {
-    for(byte i = 0; i < ALPHABET_SIZE; i++) guessedLetters[i] = false;
+    if(counter == 1) scanf(" ");
+    for(byte i = 0; i < ALPHABET_SIZE; i++) {
+      guessedLetters[i] = false;
+      letter_freq[i] = 0;
+    }
     // resetPaths(tries[curr_word_len - 1]->root);
     printf("new word\n");
-    /// call reset on the trie to be used
+    guess = ' ';
     reset(words, N_LIST);
+    counter++;
   }
 
   // guessedLetters[CHAR_TO_INDEX('e')] = true;
@@ -153,9 +173,9 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   end = clock();
 
   printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
-  // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-  //   printf("%c has %d freq \n", INDEX_TO_CHAR(i), letter_freq[i]);
-  // }
+  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+    printf("%c has %d freq \n", INDEX_TO_CHAR(i), letter_freq[i]);
+  }
   // scanf(" ");
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
   
@@ -208,19 +228,12 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   // limit to paths with guessed letter in revealed position
   if (is_correct_guess) {
 
-      // find all positions in current word
-      /// for each position that the letter occurs
-          /// for each instance of letter in that position
-                // go up to its parent
-                // for each other child
-                        // mark bad it and its ancestors
-
-    elimWords(words[curr_word_len], true, letter, instances);
+    elimWords(words[curr_word_len - 1], true, letter, instances);
 
   } // end if "correct guess"
 
   else {
-    elimWords(words[curr_word_len], false, letter, instances);
+    elimWords(words[curr_word_len - 1], false, letter, instances);
   }
 
 } // end feedback
