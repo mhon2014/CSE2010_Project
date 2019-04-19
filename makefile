@@ -6,3 +6,6 @@ remove:
 
 run: 
 	./p data/words.txt data/hiddenWords1.txt 
+
+output: 
+	./p data/words.txt data/hiddenWords1.txt > output2.txt

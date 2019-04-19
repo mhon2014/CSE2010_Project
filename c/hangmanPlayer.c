@@ -75,10 +75,6 @@ byte max_len(char* word_file) {
 
 }
 
-
-
-
-
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
   N_LIST = max_len(word_file);
@@ -116,8 +112,8 @@ void init_hangman_player(char* word_file) {
   // char c = INDEX_TO_CHAR(0);
 
   // char z = 'z';
-  for(byte i = 0; i < N_LIST; ++i)
-    printf("Number of words in trie %d : %d\n", i, words[i]->size); // for testing
+  // for(byte i = 0; i < N_LIST; ++i)
+  //   printf("Number of words in trie %d : %d\n", i, words[i]->size); // for testing
 
 
   // for(Node* cursor = words[13]->head; cursor != NULL; cursor = cursor->next) {
@@ -135,26 +131,13 @@ void init_hangman_player(char* word_file) {
 } // end init_hangman_player
 
 
-
-
-
-
-
-
-
-
-// based on the current (partially filled or intitially blank) word, guess a letter
-// current_word: current word -- may contain blanks, terminated by a null char as usual
-// is_new_word: indicates a new hidden word (current_word has blanks)
-// returns the guessed letter
-// Assume all letters in a word are in lower case
 char guess_hangman_player(char* current_word, bool is_new_word) {
 
   // variable declarations
   byte curr_word_len = strlen(current_word);
   // reset guesses if new word
   if (is_new_word) {
-    if(counter == 1) scanf(" ");
+    // if(counter == 1) scanf(" ");
     for(byte i = 0; i < ALPHABET_SIZE; i++) {
       guessedLetters[i] = false;
       letter_freq[i] = 0;
@@ -173,67 +156,32 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   end = clock();
 
   printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
-  for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-    printf("%c has %d freq \n", INDEX_TO_CHAR(i), letter_freq[i]);
-  }
-  // scanf(" ");
+  // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
+  //   printf("%c has %d freq \n", INDEX_TO_CHAR(i), letter_freq[i]);
+  // }
+
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
-  
-
-  /// go through all possible paths
-
-    /// if you find a !(is_candidate), that path is bad so stop searching it 
-    /// if you get to the end of path and it's all good
-            /// go all the way up that path and increment a 
-            /// "words with that letter in them" counter for every letter you find
-
-  /// quess = most frequent letter
-
-  // update guess_letters array with the letter we're going to guess
+  printf("only %d words remain\n", viableWords(words[curr_word_len - 1]));
 
   return guess;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// feedback on the guessed letter
-// is_correct_guess: true if the guessed letter is one of the letters in the hidden word
-// current_word: partially filled or blank word
-//   
-// Case       is_correct_guess    current_word   
-// a.         true                partial word with the guessed letter
-//                                   or the whole word if the guessed letter was the
-//                                   last letter needed
-// b.         false               partial word without the guessed letter
 void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   char letter = guess;
   byte curr_word_len = strlen(current_word);
   byte instances = checkInWord(current_word, letter);
+  uint pos = getPositions(current_word, letter);
   
   // limit to paths with guessed letter in revealed position
   if (is_correct_guess) {
 
-    elimWords(words[curr_word_len - 1], true, letter, instances);
+    elimWords(words[curr_word_len - 1], true, letter, instances, pos);
 
   } // end if "correct guess"
 
   else {
-    elimWords(words[curr_word_len - 1], false, letter, instances);
+    elimWords(words[curr_word_len - 1], false, letter, instances, pos);
   }
 
 } // end feedback
