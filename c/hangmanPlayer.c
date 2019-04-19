@@ -42,7 +42,7 @@ byte N_LIST;
 char guess;
 byte letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
 static bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
-char *prev_str = " ";
+char prev_str[MAX_LENGTH] = "\0";
 
 
 // byte max_len(char* word_file);
