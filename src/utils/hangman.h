@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "sllist.h"
+#include "dllist.h"
 
 #define MAX_LENGTH 64 // max string length for a word
 #define ALPHABET_SIZE 26 // English alphabet size
@@ -35,13 +35,13 @@ typedef struct
  ***********************************************/ 
 
 Word_t* initWord(char* val);
-char highestFreqLetter(SLList_t  *words, uint *letter_freq, bool* guessLetters);
+char highestFreqLetter(DLList_t  *words, uint *letter_freq, bool* guessLetters);
 void encode(Word_t* to_encode);
 byte_t charPresence(Word_t* w, char c);
-void elimWords(SLList_t* wordList, bool flag, char bad_letter, byte_t inst, uint pos);
+void elimWords(DLList_t* wordList, bool flag, char bad_letter, byte_t inst, uint pos);
 byte_t checkInWord(char* word, char letter);
-void reset(SLList_t** words, byte_t size);
-uint viableWords(SLList_t* wordlist); 
+void reset(DLList_t** words, byte_t size);
+uint viableWords(DLList_t* wordlist); 
 bool isMatchingPos(Word_t* w, char letter, uint pos);
 uint getPositions(char* word, char letter);
 
@@ -85,7 +85,7 @@ bool isMatchingPos(Word_t* w, char letter, uint pos) {
 
 
 /* return the number of words still candidates */
-uint viableWords(SLList_t* wordlist) {
+uint viableWords(DLList_t* wordlist) {
     uint counter = 0;
     for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = cursor->next) {
         Word_t *w = (Word_t*)cursor->data;
@@ -95,7 +95,7 @@ uint viableWords(SLList_t* wordlist) {
 }
 
 /* reset the list used for the previous guess */
-void reset(SLList_t** words, byte_t size) {
+void reset(DLList_t** words, byte_t size) {
     for(byte_t i = 0; i < size; ++i) {
         for(Node_t* cursor = words[i]->head; cursor != NULL; cursor = cursor->next) {
             Word_t *w = (Word_t*)cursor->data;
@@ -135,7 +135,7 @@ byte_t charPresence(Word_t* w, char letter) {
 update the frequency spectrum of every letter in the list of candidates
 and return the most frequent 
 */
-char highestFreqLetter(SLList_t  *wordlist, uint *letter_freq, bool* guessLetters) {
+char highestFreqLetter(DLList_t  *wordlist, uint *letter_freq, bool* guessLetters) {
 
     byte_t max = CHAR_TO_INDEX('z');
 
@@ -151,7 +151,7 @@ char highestFreqLetter(SLList_t  *wordlist, uint *letter_freq, bool* guessLetter
                     // ++letter_freq[i];
                 }
             }
-        }
+        } // else break;
     }
 
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
@@ -166,22 +166,29 @@ char highestFreqLetter(SLList_t  *wordlist, uint *letter_freq, bool* guessLetter
 
 
 /* remove the candature of words who does fit the updated guess string */
-void elimWords(SLList_t* wordlist, bool is_good, char letter, byte_t inst, uint pos) {
-    for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = cursor->next) {
+void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint pos) {
+    Node_t* next = NULL;
+    for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = next) {
+        next = cursor->next;
         Word_t *w = (Word_t*)cursor->data;
         if(is_good) {
-            byte_t w_inst = charPresence(w, letter);
+            // byte_t w_inst = charPresence(w, letter);
             if(charPresence(w, letter) != inst || !isMatchingPos(w, letter, pos)) {
                 w->is_cand = false;
             }
-            else {
-                
+            else { // is candidate
+                pushfront(wordlist, w);
+                remov(cursor);
             }
         }
         else { // is bad letter 
             byte_t w_inst = charPresence(w, letter);
             if(charPresence(w, letter) > 0) {
                 w->is_cand = false;
+            } 
+            else { // is candidate 
+                pushfront(wordlist, w);
+                remov(cursor);
             }
         }
     }

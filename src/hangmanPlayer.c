@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <time.h>
 #include "hangmanPlayer.h"
-#include "utils/sllist.h"
+#include "utils/dllist.h"
 #include "utils/hangman.h"
 
 
@@ -33,7 +33,7 @@
  * global declarations
  ******************************************************************************/ 
 
-SLList_t** words;
+DLList_t** words;
 byte_t N_LIST;
 char guess;
 uint letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
@@ -73,7 +73,7 @@ byte_t max_len(char* word_file) {
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
   N_LIST = max_len(word_file);
-  words = (SLList_t**)malloc(N_LIST*sizeof(SLList_t*));
+  words = (DLList_t**)malloc(N_LIST*sizeof(DLList_t*));
 
   for(byte_t i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
 
@@ -112,7 +112,7 @@ void init_hangman_player(char* word_file) {
 /* guess the most likely letter in the word given the current selection of words */
 char guess_hangman_player(char* current_word, bool is_new_word) {
   byte_t curr_word_len = strlen(current_word);
-  
+
   if (is_new_word) {
     // if(counter == 1) scanf(" ");
     for(byte_t i = 0; i < ALPHABET_SIZE; i++) {
@@ -120,10 +120,10 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
       letter_freq[i] = 0;
     }
   
-    // printf("new word #%d\n", counter); // DEBUG
+    printf("new word #%d\n", counter); // DEBUG
     guess = ' ';
     reset(words, N_LIST);
-    // counter++; // DEBUG
+    counter++; // DEBUG
   }
 
   previous_len = curr_word_len;
