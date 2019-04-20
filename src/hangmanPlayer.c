@@ -101,6 +101,9 @@ void init_hangman_player(char* word_file) {
     pushfront(words[strlen(line) - 1], new_word);
     strcpy(prev_str, line);
   }  
+ 
+  printf("pointer size %lf\n", (double)sizeof(freq_t*));
+  printf("struct size %lf\n", (double)sizeof(freq_t));
 
   reset(words, N_LIST);
   fclose(output); // DEBUG
