@@ -43,7 +43,7 @@ char guess;
 uint letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
 bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
 char prev_str[MAX_LENGTH] = "\0";
-byte counter = 0;
+uint counter = 1;
 
 
 // byte max_len(char* word_file);
@@ -85,7 +85,7 @@ void init_hangman_player(char* word_file) {
 
   // variable declarations
   FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
-  FILE *output = fopen("output.txt", "w");
+  FILE *output = fopen("test/output.txt", "w");
   char line[MAX_LENGTH];                       // stores each from input file
 
   // verify file opened properly
@@ -142,8 +142,8 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
       guessedLetters[i] = false;
       letter_freq[i] = 0;
     }
-    // resetPaths(tries[curr_word_len - 1]->root);
-    printf("new word\n");
+  
+    printf("new word #%d\n", counter);
     guess = ' ';
     reset(words, N_LIST);
     counter++;

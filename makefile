@@ -1,11 +1,14 @@
-termProject: c/evalHangmanPlayer.c c/hangmanPlayer.c
-	gcc -ggdb -o p c/evalHangmanPlayer.c c/hangmanPlayer.c -lm
+termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
+	gcc -ggdb -o bin/p src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 remove: 
-	rm ./p
+	rm ./bin/p
 
 run: 
-	./p data/words.txt data/hiddenWords1.txt 
+	./bin/p data/words.txt data/hiddenWords1.txt 
+
+run2:
+	./bin/p data/words.txt data/hiddenWords2.txt 
 
 output: 
-	./p data/words.txt data/hiddenWords1.txt > output2.txt
+	./bin/p data/words.txt data/hiddenWords1.txt > ./test/output2.txt
