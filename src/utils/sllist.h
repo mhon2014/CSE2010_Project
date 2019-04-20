@@ -16,8 +16,8 @@
 #define SIZE 32 //size of data stored in each node
 
 typedef unsigned int uint; //unsigned integer alias
-typedef struct node Node; // node alias
-typedef struct sllist SLList; // list alias
+typedef struct node Node_t; // node alias
+typedef struct sllist SLList_t; // list alias
 
 struct node 
 {
@@ -37,34 +37,34 @@ struct sllist
  ***************************************/ 
 
 // NODE METHODS
-Node* initNode(void* data);
-void destroyNode(Node* to_del); // clear memory of ode
+Node_t* initNode(void* data);
+void destroyNode(Node_t* to_del); // clear memory of ode
 
 //LIST METHODS
 
-SLList* initList(); // initialize a list of TNodes
-SLList* parseWords(char* line); //parse the input into SLList
-Node* traverse(SLList* List,  uint index);  //return the pointer to the node previous to the node at index 
-void destroyList(SLList* to_del); //clear memory of Taxonomic node
-void insert(SLList* List, uint index, void* data); //_insert a node with payload data at position index
-void insort(SLList* List, void* data); //_insert a node with payload data at position index
-void pushfront(SLList* List, void* data); //_insert node at the front of the list
-void pushback(SLList* List, void* data); //_insert node at the end of the list
-void printlist(SLList* List); //print all elements in the list
-void* suppress(SLList* List, uint index);  //deletes a node at position index
-void* popfront(SLList* List);  //delete node at the back of the list
-void* popback(SLList* List);  //delete node at the front of the list
-void* getAt(SLList* List, uint index); //get the data at index 
+SLList_t* initList(); // initialize a list of TNodes
+SLList_t* parseWords(char* line); //parse the input into SLList_t
+Node_t* traverse(SLList_t* List,  uint index);  //return the pointer to the node previous to the node at index 
+void destroyList(SLList_t* to_del); //clear memory of Taxonomic node
+void insert(SLList_t* List, uint index, void* data); //_insert a node with payload data at position index
+void insort(SLList_t* List, void* data); //_insert a node with payload data at position index
+void pushfront(SLList_t* List, void* data); //_insert node at the front of the list
+void pushback(SLList_t* List, void* data); //_insert node at the end of the list
+void printlist(SLList_t* List); //print all elements in the list
+void* suppress(SLList_t* List, uint index);  //deletes a node at position index
+void* popfront(SLList_t* List);  //delete node at the back of the list
+void* popback(SLList_t* List);  //delete node at the front of the list
+void* getAt(SLList_t* List, uint index); //get the data at index 
 
 
 /****************************************
- * Node Methods
+ * Node_t Methods
  ***************************************/ 
 
 
 /* Creates a new node for the tree */
-Node* initNode(void* data) {
-    Node* new_node = (Node*)malloc(sizeof(Node));
+Node_t* initNode(void* data) {
+    Node_t* new_node = (Node_t*)malloc(sizeof(Node_t));
     // new_node->data = malloc(SIZE*sizeof(char));
     new_node->data = data;
     new_node->next = NULL;
@@ -72,7 +72,7 @@ Node* initNode(void* data) {
 }
 
 /* Destroy to_del node */ 
-void destroyNode(Node* to_del) {
+void destroyNode(Node_t* to_del) {
    free(to_del);
 }
 
@@ -80,33 +80,33 @@ void destroyNode(Node* to_del) {
 
 
 /*******************************************
- * SLList Methods
+ * SLList_t Methods
  ******************************************/
 
 
 /* get data at index */
-void* getAt(SLList* List,  uint index) {
+void* getAt(SLList_t* List,  uint index) {
     return (traverse(List, index)->data);
 }
 
 
 /* initialize size to 0 and head to NULL */
-SLList* initList(void) {
-   SLList* List = (SLList*)malloc(sizeof(SLList));
+SLList_t* initList(void) {
+   SLList_t* List = (SLList_t*)malloc(sizeof(SLList_t));
    List->size = 0;
    List->head = NULL;
    return List;
 }
 
 /* clear all nodes in the list then the list itself */
-void destroyList(SLList* List) {
+void destroyList(SLList_t* List) {
     while(List->size != 0) popback(List);
     free(List);
 }
 
 
 /* print all elements in the list */
-void printlist(SLList* List) {
+void printlist(SLList_t* List) {
     if(List == NULL || List->size == 0 ) {
         printf("empty list\n");
         return;
@@ -114,14 +114,14 @@ void printlist(SLList* List) {
 
     
     if(List->size != 0) {
-        for(Node* tmp = List->head; tmp != NULL; tmp = tmp->next) {
+        for(Node_t* tmp = List->head; tmp != NULL; tmp = tmp->next) {
             printf("%s ", (char*)(tmp->data));
         }
     }
 }
 
 /* give an index N, traverse() traverse the list until N and return pointer to N-1 */
-Node* traverse(SLList* List,  uint index) {
+Node_t* traverse(SLList_t* List,  uint index) {
     // case 1: empty list
     if(List->size == 0) {
         printf("empty list!\n"); 
@@ -134,15 +134,15 @@ Node* traverse(SLList* List,  uint index) {
     }
 
     // case 3: index present
-    Node* tmp = List->head; 
+    Node_t* tmp = List->head; 
     for(uint i = 0; i < index; ++i) tmp = tmp->next; 
 
     return tmp;
 }
 
 /* insert a node with data at index */
-void insert(SLList* List,  uint index, void* data) {
-    Node* new_node = initNode(data);
+void insert(SLList_t* List,  uint index, void* data) {
+    Node_t* new_node = initNode(data);
     if(List->size == 0) { //case 1: empty list
         List->head = new_node;
         new_node->next = NULL;
@@ -153,7 +153,7 @@ void insert(SLList* List,  uint index, void* data) {
         List->head = new_node;
     } 
     else { //case 3: Non empty list with _insert at middle
-        Node* prev = traverse(List, index);
+        Node_t* prev = traverse(List, index);
         new_node->next = prev->next;
         prev->next = new_node;
     }
@@ -164,8 +164,8 @@ void insert(SLList* List,  uint index, void* data) {
 
 
 /* insert a node with data at index */
-void insort(SLList* List,  void* data) {
-    Node* new_node = initNode(data);
+void insort(SLList_t* List,  void* data) {
+    Node_t* new_node = initNode(data);
     if(List->size == 0) { //case 1: empty list
         List->head = new_node;
         new_node->next = NULL;
@@ -175,7 +175,7 @@ void insort(SLList* List,  void* data) {
         List->head = new_node;
     }   
     else { // case 3: insert sort
-        Node* prev = NULL;
+        Node_t* prev = NULL;
         for(prev = List->head; strcmp((char*)prev->next->data, (char*)data) < 0; prev = prev->next);
         new_node->next = prev->next;
         prev->next = new_node;
@@ -185,22 +185,22 @@ void insort(SLList* List,  void* data) {
 }
 
 /* insert node at the front of the list */
-void pushfront(SLList* List, void* data) {
+void pushfront(SLList_t* List, void* data) {
    insert(List, 0, data);
 } 
 
 
 /* insert node at the end of the list */
-void pushback(SLList* List, void* data) {
+void pushback(SLList_t* List, void* data) {
     if(List->size == 0) {
-        Node* new_node = initNode(data);
+        Node_t* new_node = initNode(data);
         new_node->next = NULL;
         List->head = new_node;
         ++List->size;
     }
     else 
     if(List->size == 1) { //edge case for single node list
-        Node* new_node = initNode(data);
+        Node_t* new_node = initNode(data);
         new_node->next = List->head->next;
         List->head->next = new_node;
         ++List->size;
@@ -210,7 +210,7 @@ void pushback(SLList* List, void* data) {
 
 
 /* suppress() deletes node at index */ 
-void* suppress(SLList* List, uint index) {
+void* suppress(SLList_t* List, uint index) {
     //case 1: empty list
     if(List->size == 0) {
         printf("empty list!\n");
@@ -222,7 +222,7 @@ void* suppress(SLList* List, uint index) {
         return NULL;
     }
 
-    Node* to_del;
+    Node_t* to_del;
     void* tmp = NULL;
     
     if(index == 0) { //case 3: deleting head
@@ -231,7 +231,7 @@ void* suppress(SLList* List, uint index) {
 
     } 
     else {  //case 4: deleting any node that is not head
-        Node* prev = traverse(List, index - 1);
+        Node_t* prev = traverse(List, index - 1);
         to_del = prev->next;
         prev->next = to_del->next;
 
@@ -244,20 +244,20 @@ void* suppress(SLList* List, uint index) {
 }
 
 /* delete node at the back of the list */
-void* popfront(SLList* List) {
+void* popfront(SLList_t* List) {
     return suppress(List,0);
 }  
 
 
 /* delete node at the front of the list */
-void* popback(SLList* List) {
+void* popback(SLList_t* List) {
     return suppress(List, List->size - 1);
 }  
 
 
 /* Parses the input line for relevant commands */ 
-SLList* parseWords(char* line) {
-    SLList* tmp = initList(); //command created with be used by then freed by parseCmd()
+SLList_t* parseWords(char* line) {
+    SLList_t* tmp = initList(); //command created with be used by then freed by parseCmd()
     char* word_token;
     char* delim = " \r\n";
 

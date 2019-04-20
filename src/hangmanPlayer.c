@@ -25,36 +25,31 @@
 #include <time.h>
 #include "hangmanPlayer.h"
 #include "utils/sllist.h"
-// #include "utils/trie.h"
 #include "utils/hangman.h"
 
 
-#define MAX_LENGTH 128
 
 /*******************************************************************************
  * global declarations
  ******************************************************************************/ 
-// Trie *trie;
-// Trie **tries;
 
-SLList** words;
-byte N_LIST;
+SLList_t** words;
+byte_t N_LIST;
 char guess;
 uint letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
 bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
-char prev_str[MAX_LENGTH] = "\0";
+char prev_str[MAX_LENGTH] = "\0"; // keys track of the previous string to remove duplicates
 uint counter = 1;
-
-
-// byte max_len(char* word_file);
+byte_t previous_len = 0;
 
 /******************************************************************************
  * METHODS
  *****************************************************************************/
 
-byte max_len(char* word_file) {
+/* return the lentgh of the longest word in the words file */
+byte_t max_len(char* word_file) {
 
-  byte maxlen = 0;
+  byte_t maxlen = 0;
   FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
   char line[MAX_LENGTH];      
 
@@ -64,7 +59,7 @@ byte max_len(char* word_file) {
   }
 
   while(fscanf(file_ptr, " %s", line) != EOF) {
-    byte wordlen = strlen(line);
+    byte_t wordlen = strlen(line);
     // printf("strlen = %d\n", wordlen);
     if(wordlen > maxlen) maxlen = wordlen;
   }  
@@ -78,14 +73,14 @@ byte max_len(char* word_file) {
 // initialize data structures from the word file
 void init_hangman_player(char* word_file) {
   N_LIST = max_len(word_file);
-  words = (SLList**)malloc(N_LIST*sizeof(SLList*));
+  words = (SLList_t**)malloc(N_LIST*sizeof(SLList_t*));
 
-  for(byte i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
+  for(byte_t i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
 
 
   // variable declarations
   FILE *file_ptr = fopen(word_file, "r");  // file pointer for word file
-  FILE *output = fopen("test/output.txt", "w");
+  FILE *output = fopen("test/output.txt", "w"); // DEBUG
   char line[MAX_LENGTH];                       // stores each from input file
 
   // verify file opened properly
@@ -95,95 +90,66 @@ void init_hangman_player(char* word_file) {
   }
 
   // initialize the trie
-  for(byte trie_i = 0; trie_i < N_LIST; ++trie_i) words[trie_i] = initList();
+  for(byte_t trie_i = 0; trie_i < N_LIST; ++trie_i) words[trie_i] = initList();
 
   // insert elements into trie
   while(fscanf(file_ptr, " %s", line) != EOF) {
-    
     line[0] = tolower(line[0]);
     if(!strcmp(line, prev_str)) continue; // skip duplicates
-    Word* new_word = initWord(line);
+    Word_t* new_word = initWord(line);
     pushfront(words[strlen(line) - 1], new_word);
     strcpy(prev_str, line);
-
   }  
 
-  // byte i = CHAR_TO_INDEX('z');
-  // char c = INDEX_TO_CHAR(0);
-
-  // char z = 'z';
-  // for(byte i = 0; i < N_LIST; ++i)
-  //   printf("Number of words in trie %d : %d\n", i, words[i]->size); // for testing
-
-
-  // for(Node* cursor = words[13]->head; cursor != NULL; cursor = cursor->next) {
-  //   Word *w = (Word*)cursor->data;
-  //   fprintf(output, "%s\n", w->val); 
-  //   printf("%s\n", w->val);
-  // }
-
-  fclose(output);
+  fclose(output); // DEBUG
   fclose(file_ptr);
-
-  // printf("size of DS %ld\n", sizeof(words));
   return;
 
 } // end init_hangman_player
 
 
-char guess_hangman_player(char* current_word, bool is_new_word) {
 
-  // variable declarations
-  byte curr_word_len = strlen(current_word);
-  // reset guesses if new word
+/* guess the most likely letter in the word given the current selection of words */
+char guess_hangman_player(char* current_word, bool is_new_word) {
+  byte_t curr_word_len = strlen(current_word);
+  
   if (is_new_word) {
     // if(counter == 1) scanf(" ");
-    for(byte i = 0; i < ALPHABET_SIZE; i++) {
+    for(byte_t i = 0; i < ALPHABET_SIZE; i++) {
       guessedLetters[i] = false;
       letter_freq[i] = 0;
     }
   
-    printf("new word #%d\n", counter);
+    // printf("new word #%d\n", counter); // DEBUG
     guess = ' ';
     reset(words, N_LIST);
-    counter++;
+    // counter++; // DEBUG
   }
 
-  // guessedLetters[CHAR_TO_INDEX('e')] = true;
-  clock_t st,end;
-  st = clock();
+  previous_len = curr_word_len;
+
   guess = highestFreqLetter(words[curr_word_len - 1], letter_freq, guessedLetters);
-  end = clock();
-
-  printf("guessed %c at timing: %.4e\n", guess, ((double) (end - st)) / CLOCKS_PER_SEC);
-  // for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-  //   printf("%c has %d freq \n", INDEX_TO_CHAR(i), letter_freq[i]);
-  // }
-
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
-  uint words_left = viableWords(words[curr_word_len - 1]);
-  printf("only %d words remain\n", viableWords(words[curr_word_len - 1]));
+  printf("guessed %c \n", guess);
+
+  // uint words_left = viableWords(words[curr_word_len - 1]);
+  // printf("only %d words remain\n", viableWords(words[curr_word_len - 1]));
 
   return guess;
 }
 
-
+/* update the selection of word based on the guess */
 void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   char letter = guess;
-  byte curr_word_len = strlen(current_word);
-  byte instances = checkInWord(current_word, letter);
+  byte_t curr_word_len = strlen(current_word);
+  byte_t instances = checkInWord(current_word, letter);
   uint pos = getPositions(current_word, letter);
   
-  // limit to paths with guessed letter in revealed position
   if (is_correct_guess) {
-
     elimWords(words[curr_word_len - 1], true, letter, instances, pos);
-
   } // end if "correct guess"
-
   else {
     elimWords(words[curr_word_len - 1], false, letter, instances, pos);
   }
-
-} // end feedback
+} 
 
