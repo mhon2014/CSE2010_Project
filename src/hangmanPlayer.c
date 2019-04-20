@@ -161,6 +161,7 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   // }
 
   guessedLetters[CHAR_TO_INDEX(guess)] = true;
+  uint words_left = viableWords(words[curr_word_len - 1]);
   printf("only %d words remain\n", viableWords(words[curr_word_len - 1]));
 
   return guess;

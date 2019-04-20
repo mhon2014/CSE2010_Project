@@ -140,7 +140,7 @@ char highestFreqLetter(SLList  *wordlist, uint *letter_freq, bool* guessLetters)
     //     arr[i] = letter_freq[i]; // DEBUG
     // return max freq letter
     for(byte i = 0; i < ALPHABET_SIZE; ++i) {
-        if((letter_freq[i] > letter_freq[max]) && !guessLetters[i]) {
+        if((letter_freq[i] >= letter_freq[max]) && !guessLetters[i]) {
             max = i;
         }
     }
