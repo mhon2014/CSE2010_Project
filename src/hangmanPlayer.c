@@ -114,7 +114,7 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   byte_t curr_word_len = strlen(current_word);
 
   if (is_new_word) {
-    // if(counter == 1) scanf(" ");
+    // if(counter == 5) scanf(" ");
     for(byte_t i = 0; i < ALPHABET_SIZE; i++) {
       guessedLetters[i] = false;
       letter_freq[i] = 0;

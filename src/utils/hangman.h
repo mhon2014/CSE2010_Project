@@ -143,6 +143,7 @@ char highestFreqLetter(DLList_t  *wordlist, uint *letter_freq, bool* guessLetter
 
     for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = cursor->next) {
         Word_t *w = (Word_t*)cursor->data;
+        // printf("candidature : %s\n", w->is_cand?"cand":"not cand");
         if(w->is_cand) {
             for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
                 // char tmp = INDEX_TO_CHAR(i); // DEBUG
@@ -151,7 +152,7 @@ char highestFreqLetter(DLList_t  *wordlist, uint *letter_freq, bool* guessLetter
                     // ++letter_freq[i];
                 }
             }
-        } // else break;
+        } else break;
     }
 
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
@@ -177,8 +178,11 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
                 w->is_cand = false;
             }
             else { // is candidate
-                pushfront(wordlist, w);
-                remov(cursor);
+                // w->is_cand = true;
+                if(w->is_cand) {
+                    pushfront(wordlist, w);
+                    removFromList(wordlist, cursor);
+                }
             }
         }
         else { // is bad letter 
@@ -187,8 +191,11 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
                 w->is_cand = false;
             } 
             else { // is candidate 
-                pushfront(wordlist, w);
-                remov(cursor);
+                // w->is_cand = true;
+                if(w->is_cand) {
+                    pushfront(wordlist, w);
+                    removFromList(wordlist, cursor);
+                }
             }
         }
     }

@@ -58,6 +58,7 @@ void* popfront(DLList_t* List);  //delete node at the back of the list
 void* popback(DLList_t* List);  //delete node at the front of the list
 void* getAt(DLList_t* List, uint index); //get the data at index 
 void* remov(Node_t* to_del);
+void* removFromList(DLList_t* List, Node_t* to_del);
 
 
 /****************************************
@@ -314,5 +315,16 @@ void* remov(Node_t* to_del) {
     if(to_del->next != NULL) to_del->next->prev = to_del->prev;
     free(to_del);
     return ret;
+}
+
+
+void* removFromList(DLList_t* List, Node_t* to_del) {
+    if(List->size == 0) {
+        printf("empty list!\n");
+        return NULL;
+    }
+    if(List->head == to_del) List->head = to_del->next;
+    if(List->tail == to_del) List->tail = to_del->prev;
+    return remov(to_del);
 }
 #endif //DLLIST_H
