@@ -36,11 +36,12 @@
 DLList_t** words;
 byte_t N_LIST;
 char guess;
-uint letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
+ushort letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
 bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
 char prev_str[MAX_LENGTH] = "\0"; // keys track of the previous string to remove duplicates
 uint counter = 1;
-byte_t previous_len = 0;
+byte_t previous_len = 1;
+// bool done = true;
 
 /******************************************************************************
  * METHODS
@@ -101,6 +102,7 @@ void init_hangman_player(char* word_file) {
     strcpy(prev_str, line);
   }  
 
+  reset(words, N_LIST);
   fclose(output); // DEBUG
   fclose(file_ptr);
   return;
@@ -122,7 +124,7 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   
     printf("new word #%d\n", counter); // DEBUG
     guess = ' ';
-    reset(words, N_LIST);
+    resetList(words[previous_len - 1]);
     counter++; // DEBUG
   }
 

@@ -16,6 +16,7 @@
 #define SIZE 32 //size of data stored in each node
 
 typedef unsigned int uint; //unsigned integer alias
+typedef unsigned short ushort;
 typedef struct node Node_t; // node alias
 typedef struct dllist DLList_t; // list alias
 
