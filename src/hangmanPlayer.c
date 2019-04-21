@@ -155,16 +155,21 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
 
 /* update the selection of word based on the guess */
 void feedback_hangman_player(bool is_correct_guess, char* current_word) {
-  char letter = guess;
-  byte_t curr_word_len = strlen(current_word);
-  byte_t instances = checkInWord(current_word, letter);
+
+  // variable declarations
+  char letter = guess;                                     // letter that was guessed
+  byte_t curr_word_len = strlen(current_word);             // get length of current word
+  byte_t instances = checkInWord(current_word, letter);    
   uint pos = getPositions(current_word, letter);
   
   if (is_correct_guess) {
     elimWords(words[curr_word_len - 1], true, letter, instances, pos);
-  } // end if "correct guess"
+  } 
   else {
     elimWords(words[curr_word_len - 1], false, letter, instances, pos);
   }
+
+  return;
+
 } 
 
