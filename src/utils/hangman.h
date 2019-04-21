@@ -107,9 +107,10 @@ void reset(DLList_t** words, byte_t size) {
 
 /* reset the list used for the previous guess */
 void resetList(DLList_t* words) {
-    for(Node_t* cursor = words->head; cursor != NULL; cursor = cursor->next) {
+    for(Node_t* cursor = words->tail; cursor != NULL; cursor = cursor->prev) {
         Word_t *w = (Word_t*)cursor->data;
-        w->is_cand = true;
+        if(w->is_cand) break;
+        else w->is_cand = true;
     }
 }
 
@@ -179,6 +180,7 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
     for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = next) {
         next = cursor->next;
         Word_t *w = (Word_t*)cursor->data;
+        if(!w->is_cand) break;
         if(is_good) {
             // byte_t w_inst = charPresence(w, letter);
             if(charPresence(w, letter) != inst || !isMatchingPos(w, letter, pos)) {

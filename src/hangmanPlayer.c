@@ -41,7 +41,6 @@ bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
 char prev_str[MAX_LENGTH] = "\0"; // keys track of the previous string to remove duplicates
 uint counter = 1;
 byte_t previous_len = 1;
-// bool done = true;
 
 /******************************************************************************
  * METHODS
@@ -98,14 +97,16 @@ void init_hangman_player(char* word_file) {
     line[0] = tolower(line[0]);
     if(!strcmp(line, prev_str)) continue; // skip duplicates
     Word_t* new_word = initWord(line);
-    pushfront(words[strlen(line) - 1], new_word);
+    pushback(words[strlen(line) - 1], new_word);
     strcpy(prev_str, line);
   }  
  
-  printf("pointer size %lf\n", (double)sizeof(freq_t*));
-  printf("struct size %lf\n", (double)sizeof(freq_t));
+  // printf("pointer size %ld\n", sizeof(freq_t*));
+  // printf("struct size %ld\n", sizeof(freq_t));
+  // printf("ushort size %ld\n", sizeof(ushort));
+  // printf("uint size %ld\n", sizeof(uint));
 
-  reset(words, N_LIST);
+  // reset(words, N_LIST);
   fclose(output); // DEBUG
   fclose(file_ptr);
   return;
