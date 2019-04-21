@@ -27,7 +27,7 @@
 #include "utils/dllist.h"
 #include "utils/hangman.h"
 
-
+#define THRESHOLD 1
 
 /*******************************************************************************
  * GLOBAL VARS
@@ -35,6 +35,8 @@
 
 DLList_t** words;
 byte_t num_lists;
+byte_t num_guesses = 0;
+bool isMostFreq = false;
 char guess;
 ushort letter_freq[ALPHABET_SIZE]; // stores list of locations for each letter
 bool guessedLetters[ALPHABET_SIZE]; // = { 0 };
@@ -81,7 +83,7 @@ void init_hangman_player(char* word_file) {
 
   // variable declarations
   FILE *file_ptr = fopen(word_file, "r");        // file pointer for word file
-  FILE *output = fopen("test/output.txt", "w");  // DEBUG
+  // FILE *output = fopen("test/output.txt", "w");  // DEBUG
   char line[MAX_LENGTH];                         // stores each from input file
 
   // verify file opened properly
@@ -110,13 +112,7 @@ void init_hangman_player(char* word_file) {
 
   } 
  
-  // printf("pointer size %ld\n", sizeof(freq_t*));
-  // printf("struct size %ld\n", sizeof(freq_t));
-  // printf("ushort size %ld\n", sizeof(ushort));
-  // printf("uint size %ld\n", sizeof(uint));
-
-  // reset(words, N_LIST);
-  fclose(output); // DEBUG
+  // fclose(output); // DEBUG
   fclose(file_ptr);
 
   return;
@@ -140,13 +136,18 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
     // printf("new word #%d\n", counter); // DEBUG
     guess = ' ';
     resetList(words[previous_len - 1]);
+    num_guesses = 0;
     // counter++; // DEBUG
   
   } // end if
 
   previous_len = curr_word_len;  
 
-  guess = highestFreqLetter(words[curr_word_len - 1], letter_freq, guessedLetters);
+  if(num_guesses < THRESHOLD) isMostFreq = false;
+  else isMostFreq = true;
+
+  guess = highestFreqLetter(words[curr_word_len - 1], letter_freq, guessedLetters, isMostFreq);
+  ++num_guesses;
   guessedLetters[C2I(guess)] = true;
   // printf("guessed %c \n", guess);
 

@@ -1,5 +1,5 @@
-termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
-	gcc -ggdb -o bin/p src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+main: src/evalHangmanPlayer.c src/hangmanPlayer.c
+	gcc -o bin/p src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 remove: 
 	rm ./bin/p
@@ -12,3 +12,6 @@ run2:
 
 output: 
 	./bin/p data/words.txt data/hiddenWords1.txt > ./test/output2.txt
+
+debug: 
+	gcc -ggdb -o bin/p src/evalHangmanPlayer.c src/hangmanPlayer.c -lm

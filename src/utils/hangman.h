@@ -37,7 +37,7 @@ typedef struct
  ***********************************************/ 
 
 Word_t* initWord(char* val);
-char highestFreqLetter(DLList_t  *words, ushort *letter_freq, bool* guessLetters);
+char highestFreqLetter(DLList_t  *words, ushort *letter_freq, bool* guessLetters, bool most_freq);
 void encode(Word_t* to_encode, char* val);
 byte_t charPresence(Word_t* w, char c);
 void elimWords(DLList_t* wordList, bool flag, char bad_letter, byte_t inst, uint pos);
@@ -182,9 +182,11 @@ byte_t charPresence(Word_t* w, char letter) {
 update the frequency spectrum of every letter in the list of candidates
 and return the most frequent 
 */
-char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLetters) {
+char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLetters, bool most_freq) {
 
     byte_t max = C2I('z');
+    // byte_t min = C2I('e'); // doesn't help with accuracy
+    byte_t tmp = C2I('z');
 
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
 
@@ -207,9 +209,15 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
         if((letter_freq[i] >= letter_freq[max]) && !guessLetters[i]) {
             max = i;
         }
+        if((letter_freq[i] > letter_freq[tmp]) && !guessLetters[i]) {
+            tmp = i;
+        }
     }
 
-    return I2C(max);
+    if(most_freq)
+        return I2C(max);
+    else // least freq
+        return I2C(tmp); 
 }
 
 
@@ -220,7 +228,9 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
     for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = next) {
         next = cursor->next;
         Word_t *w = (Word_t*)cursor->data;
-        if(!w->is_cand) break;
+        // stop looping if not in word
+        if(!w->is_cand) 
+            break;
         if(is_good) {
             // byte_t w_inst = charPresence(w, letter);
             if(charPresence(w, letter) != inst || !isMatchingPos(w, letter, pos)) {
