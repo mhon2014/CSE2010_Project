@@ -43,7 +43,7 @@ struct dllist
 Node_t* initNode(void* data);
 void destroyNode(Node_t* to_del); // clear memory of ode
 
-//LIST METHODS
+// LIST METHODS
 
 DLList_t* initList(); // initialize a list of TNodes
 DLList_t* parseWords(char* line); //parse the input into DLList_t
@@ -232,14 +232,6 @@ void pushback(DLList_t* List, void* data) {
         ++List->size;
     }
     else insert(List, List->size, data);
-    // if(List->size == 1) { //edge case for single node list
-    //     Node_t* new_node = initNode(data);
-    //     new_node->next = List->head->next;
-    //     List->head->next = new_node;
-    //     ++List->size;
-
-    // } else insert(List, List->size - 1, data);
-    
 }  
 
 
