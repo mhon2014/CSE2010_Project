@@ -1,14 +1,17 @@
 termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
-	gcc -ggdb -o bin/p src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+
+debug: src/evalHangmanPlayer.c src/hangmanPlayer.c
+	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 remove: 
-	rm ./bin/p
+	rm ./hangman
 
 run: 
-	./bin/p data/words.txt data/hiddenWords1.txt 
+	./hangman data/words.txt data/hiddenWords1.txt 
 
 run2:
-	./bin/p data/words.txt data/hiddenWords2.txt 
+	./hangman data/words.txt data/hiddenWords2.txt 
 
 output: 
-	./bin/p data/words.txt data/hiddenWords1.txt > ./test/output2.txt
+	./hangman data/words.txt data/hiddenWords1.txt > ./test/output2.txt
