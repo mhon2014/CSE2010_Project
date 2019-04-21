@@ -6,17 +6,18 @@
 #include <stdbool.h>
 #include "dllist.h"
 
+#define NONE 255
 #define MAX_LENGTH 32 // max string length for a word
 #define ALPHABET_SIZE 26 // English alphabet size
-#define CHAR_TO_INDEX(x) ((int)x - (int)'a')  // Hash function to convert letters to indices 
-#define INDEX_TO_CHAR(x) (char)((int)x + (int)'a') // Hash function to convert indices to letters
+#define C2I(x) ((int)x - (int)'a')  // Hash function to convert letters to indices 
+#define I2C(x) (char)((int)x + (int)'a') // Hash function to convert indices to letters
 
 
 typedef unsigned char byte_t; // 1 byte type
 typedef struct
 {
     byte_t freq; // number of occurences of the letter in the word
-    uint positions; // encoded position of the letter in the word
+    uint pos; // encoded position of the letter in the word
 
 } freq_t;
 
@@ -24,7 +25,8 @@ typedef struct
 {
 
     // char* val; // word itself
-    freq_t char_freq[ALPHABET_SIZE]; // occurences and position of every letter in word
+    byte_t freqs_indices[ALPHABET_SIZE]; // occurences and position of every letter in word
+    freq_t* letter_freqs;
     bool is_cand; // true if word is still candidate to guess
 
 } Word_t;
@@ -45,25 +47,64 @@ uint viableWords(DLList_t* wordlist);
 bool isMatchingPos(Word_t* w, char letter, uint pos);
 uint getPositions(char* word, char letter);
 void resetList(DLList_t* words);
-
+byte_t numDistinctLetters(char* word, byte_t* freq_indices);
 
 /****************************************************************
  * IMPLEMENTATIONS
  * ****************************************************************/
 
+byte_t numDistinctLetters(char* word, byte_t* freq_indices) {
+    byte_t counter = 0;
+    byte_t tmp[26] = { 0 };
+    // byte_t pos = 0;
+    
+    for(byte_t c = 0; c < strlen(word); ++c) {
+        ++tmp[C2I(word[c])];
+    }
+
+    for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
+        if(tmp[i] > 0) {
+            freq_indices[i] = counter;
+            ++counter;
+        }
+        else 
+            freq_indices[i] = NONE;
+    }
+    return counter;
+}
+
+
 /* initialize a word base on data received */
 Word_t* initWord(char* word) {
     Word_t* new_node = (Word_t*)malloc(sizeof(Word_t));
-
-    // new_node->val = (char*)malloc((strlen(word) + 1)*sizeof(char));
-    // strcpy(new_node->val, word);
+    
     new_node->is_cand = true;
+    new_node->letter_freqs = (freq_t*)malloc(numDistinctLetters(word, new_node->freqs_indices)*sizeof(freq_t));
+
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
-        new_node->char_freq[i].freq = 0;
-        new_node->char_freq[i].positions = 0x00000000;
+        if(new_node->freqs_indices[i] != NONE) {
+            // new_node->char_freq[i].freq = 0;
+             // new_node->char_freq[i].pos = 0x00000000;
+            new_node->letter_freqs[new_node->freqs_indices[i]].freq = 0;
+            new_node->letter_freqs[new_node->freqs_indices[i]].pos = 0x00000000;
+        }
     }
+
     encode(new_node, word);
     return new_node;
+}
+
+/* encode frequency and position of every letter in word */
+void encode(Word_t* word, char* val) {
+    for(byte_t char_i = 0; char_i < strlen(val); ++char_i) {
+        // ++(word->char_freq[C2I(val[char_i])].freq);
+        // word->char_freq[C2I(val[char_i])].pos |= (1 << (32 - char_i));
+        byte_t j = C2I(val[char_i]);
+        if(word->freqs_indices[j] != NONE) {
+            ++(word->letter_freqs[word->freqs_indices[j]].freq);
+            word->letter_freqs[word->freqs_indices[j]].pos |= (1 << (32 - char_i));
+        }
+    }
 }
 
 
@@ -79,9 +120,10 @@ uint getPositions(char* word, char letter) {
 }
 
 
-/* determines if letter matches certain positions in a word */
+/* determines if letter matches certain pos in a word */
 bool isMatchingPos(Word_t* w, char letter, uint pos) {
-    return (w->char_freq[CHAR_TO_INDEX(letter)].positions ^ pos) == 0x00000000;
+    return ((w->letter_freqs[w->freqs_indices[C2I(letter)]].pos ^ pos) == 0x00000000);
+    // return (w->char_freq[C2I(letter)].pos ^ pos) == 0x00000000;
 }
 
 
@@ -126,17 +168,14 @@ byte_t checkInWord(char* word, char letter){
     return counter;
 }
 
-/* encode frequency and position of every letter in word */
-void encode(Word_t* word, char* val) {
-    for(byte_t char_i = 0; char_i < strlen(val); ++char_i) {
-        ++(word->char_freq[CHAR_TO_INDEX(val[char_i])].freq);
-        word->char_freq[CHAR_TO_INDEX(val[char_i])].positions |= (1 << (32 - char_i));
-    }
-}
-
 /* return the number of occurences of a letter in word */
 byte_t charPresence(Word_t* w, char letter) {
-    return w->char_freq[CHAR_TO_INDEX(letter)].freq;
+    byte_t i = C2I(letter);
+    if(w->freqs_indices[i] != NONE) 
+        return w->letter_freqs[w->freqs_indices[i]].freq;
+    else 
+        return 0;
+    // return w->char_freq[C2I(letter)].freq;
 }
 
 /* 
@@ -145,7 +184,7 @@ and return the most frequent
 */
 char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLetters) {
 
-    byte_t max = CHAR_TO_INDEX('z');
+    byte_t max = C2I('z');
 
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
 
@@ -154,9 +193,10 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
         // printf("candidature : %s\n", w->is_cand?"cand":"not cand");
         if(w->is_cand) {
             for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
-                // char tmp = INDEX_TO_CHAR(i); // DEBUG
-                if(charPresence(w, INDEX_TO_CHAR(i)) > 0) {
-                    letter_freq[i] += charPresence(w, INDEX_TO_CHAR(i));
+                // char tmp = I2C(i); // DEBUG
+                byte_t p = charPresence(w, I2C(i));
+                if( p > 0) {
+                    letter_freq[i] += p;
                     // ++letter_freq[i];
                 }
             }
@@ -169,7 +209,7 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
         }
     }
 
-    return INDEX_TO_CHAR(max);
+    return I2C(max);
 }
 
 

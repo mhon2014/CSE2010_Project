@@ -147,7 +147,7 @@ char guess_hangman_player(char* current_word, bool is_new_word) {
   previous_len = curr_word_len;  
 
   guess = highestFreqLetter(words[curr_word_len - 1], letter_freq, guessedLetters);
-  guessedLetters[CHAR_TO_INDEX(guess)] = true;
+  guessedLetters[C2I(guess)] = true;
   // printf("guessed %c \n", guess);
 
   // uint words_left = viableWords(words[curr_word_len - 1]);
