@@ -1,19 +1,21 @@
 \BOOKMARK [1][-]{section.1}{Goal and Motivation}{}% 1
 \BOOKMARK [1][-]{section.2}{Initial Approach}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Algorithms and Supporting Data Structures}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Ideas Devised by Group}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Ideas Discussed in Course and Material}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{Ideas from Other Sources}{section.2}% 6
-\BOOKMARK [1][-]{section.3}{Final Approach}{}% 7
-\BOOKMARK [2][-]{subsection.3.1}{Changes in Algorithms and Supporting Data Structures}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.2}{Ideas Devised by Group}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.3}{Ideas Discussed in Course and Material}{section.3}% 10
-\BOOKMARK [2][-]{subsection.3.4}{Ideas from Other Sources}{section.3}% 11
-\BOOKMARK [1][-]{section.4}{Evaluation}{}% 12
-\BOOKMARK [2][-]{subsection.4.1}{Accuracy, Time, and Memory usage}{section.4}% 13
-\BOOKMARK [2][-]{subsection.4.2}{Improvements from Initial to Final Submission}{section.4}% 14
-\BOOKMARK [1][-]{section.5}{Analysis}{}% 15
-\BOOKMARK [2][-]{subsection.5.1}{Improvement in Accuracy}{section.5}% 16
-\BOOKMARK [2][-]{subsection.5.2}{Improvement in Time Complexity}{section.5}% 17
-\BOOKMARK [2][-]{subsection.5.3}{Improvements in Memory Usage}{section.5}% 18
-\BOOKMARK [2][-]{subsection.5.4}{Possible Further Improvements}{section.5}% 19
+\BOOKMARK [2][-]{subsection.2.2}{Additional Input: Headers}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Ideas Devised by Group}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Ideas Discussed in Course and Material}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Ideas from Other Sources}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Final Approach}{}% 8
+\BOOKMARK [2][-]{subsection.3.1}{Changes in Algorithms and Supporting Data Structures}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Additional Input: Headers}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.3}{Ideas Devised by Group}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.4}{Ideas Discussed in Course and Material}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.5}{Ideas from Other Sources}{section.3}% 13
+\BOOKMARK [1][-]{section.4}{Evaluation}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Accuracy, Time, and Memory usage}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Improvements from Initial to Final Submission}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Analysis}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{Improvement in Accuracy}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{Improvement in Time Complexity}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.3}{Improvements in Memory Usage}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.4}{Possible Further Improvements}{section.5}% 21

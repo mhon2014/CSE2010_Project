@@ -183,18 +183,13 @@
 
 % Main Part
 \section{Goal and Motivation}
-\PARstart{T}{he} project serves to simulate a game of Hangman. Our program will interface with an evaluation program that provides a list of unknown words and returns feedback on guessed letters. The "Hangman Player" program will initialize data structures from a dictionary file, use known information to guess a subsequent letter, and perform additional operations in response to feedback from the evaluation program.
+\PARstart{T}{he} project serves to simulate a game of Hangman. Our program will interface with an evaluation program that provides a list of unknown words and returns feedback on guessed letters. The "Hangman Player" program will initialize data structures from a dictionary file, use known information to guess a subsequent letter, and perform additional operations in response to feedback from the evaluation program. This project tests our ability to efficiently match patterns in strings.
 
 \section{Initial Approach}
 
 \subsection{Algorithms and Supporting Data Structures}
 
-\begin{lstlisting}[language=C, caption=Snippet Example]
-int main() {
-	printf("Hello World\n");
-	return 0;
-}
-\end{lstlisting}
+\subsection{Additional Input: Headers}
 
 \subsection{Ideas Devised by Group}
 
@@ -205,6 +200,19 @@ int main() {
 \section{Final Approach}
 
 \subsection{Changes in Algorithms and Supporting Data Structures}
+Rather than storing each word as an ordered path of characters in a trie structure, the information on each word is encoded in the following structure.
+
+\begin{lstlisting}[language=C, caption=Word Struct]
+typedef struct {
+
+    byte_t freqs_indices[ALPHABET_SIZE]; 
+    freq_t* letter_freqs;
+    bool is_cand; 
+
+} Word_t;
+\end{lstlisting}
+
+\subsection{Additional Input: Headers}
 
 \subsection{Ideas Devised by Group}
 
