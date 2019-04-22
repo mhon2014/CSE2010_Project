@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include "dllist.h"
 
+
+#define ACC_ADJ 1 // adjust guesses based on trial and error
 #define NONE 255
 #define MAX_LENGTH 32 // max string length for a word
 #define ALPHABET_SIZE 26 // English alphabet size
@@ -48,6 +50,7 @@ bool isMatchingPos(Word_t* w, char letter, uint pos);
 uint getPositions(char* word, char letter);
 void resetList(DLList_t* words);
 byte_t numDistinctLetters(char* word, byte_t* freq_indices);
+void sortedLetterFreq(ushort* letter_freq, char* letterPriority);
 
 /****************************************************************
  * IMPLEMENTATIONS
@@ -186,8 +189,10 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
 
     byte_t max = C2I('z');
     // byte_t min = C2I('e'); // doesn't help with accuracy
-    byte_t tmp = C2I('z');
+    byte_t first_occ_max = C2I('z');
 
+    char priority_arr[ALPHABET_SIZE];
+    byte_t priority_pos = 0;
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) letter_freq[i] = 0;
 
     for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = cursor->next) {
@@ -208,16 +213,20 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
         if((letter_freq[i] >= letter_freq[max]) && !guessLetters[i]) {
             max = i;
+            
         }
-        if((letter_freq[i] > letter_freq[tmp]) && !guessLetters[i]) {
-            tmp = i;
+        if((letter_freq[i] > letter_freq[first_occ_max]) && !guessLetters[i]) {
+            priority_arr[priority_pos++] = I2C(i);
+            first_occ_max = i;
         }
     }
+
+    
 
     if(most_freq)
         return I2C(max);
     else // least freq
-        return I2C(tmp); 
+        return priority_arr[priority_pos - ACC_ADJ]; 
 }
 
 
@@ -259,5 +268,7 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
         }
     }
 }
+
+
 
 #endif // HANGMAN_H
