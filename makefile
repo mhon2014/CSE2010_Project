@@ -1,8 +1,17 @@
-termProject: c/evalHangmanPlayer.c c/hangmanPlayer.c
-	gcc -o p c/evalHangmanPlayer.c c/hangmanPlayer.c -lm
+termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
+	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+
+debug: src/evalHangmanPlayer.c src/hangmanPlayer.c
+	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 remove: 
-	rm ./p
+	rm ./hangman
 
 run: 
-	./p data/words.txt data/hiddenWords1.txt 
+	./hangman data/words.txt data/hiddenWords1.txt 
+
+run2:
+	./hangman data/words.txt data/hiddenWords2.txt 
+
+output: 
+	./hangman data/words.txt data/hiddenWords1.txt > ./test/output2.txt
