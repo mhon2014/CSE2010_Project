@@ -199,22 +199,38 @@
 
 \section{Final Approach}
 
-\subsection{Changes in Algorithms and Supporting Data Structures}
+\subsection{Changes in Supporting Data Structures}
 Rather than storing each word as an ordered path of characters in a trie structure, the information on each word is encoded in the following structure.
 
-\begin{lstlisting}[language=C, caption=Word Struct]
+%Description of word type
+\begin{lstlisting}[language=C, caption=Word Struct in "hangman.h"]
 typedef struct {
 
-    byte_t freqs_indices[ALPHABET_SIZE]; 
-    freq_t* letter_freqs;
-    bool is_cand; 
+    bool is_cand;                         
+    letter_t* distinct_letters;          
+    byte_t get_letter_t[ALPHABET_SIZE];;  
 
-} Word_t;
+} word_t;
 \end{lstlisting}
 
-The array \texttt{freqs\_indices} contains the frequency of each letter in the word. 
+The boolean \texttt{is\_cand} indicates whether the given word is still a candidate, meaning it matches the known information about the hidden word thus far. The variable \texttt{distinct\_letters} is a dynamically allocated array of  \texttt{letter\_t} types, containing information on each letter in the word. The array \texttt{get\_letter\_t} maps each letter in the word to a \texttt{get\_letter\_t} struct of related statistics on that letter. If a letter does not occur in the word, the element in \texttt{get\_letter\_t} has value \texttt{NONE = 255}.
 
-The boolean \texttt{is\_cand} indicates whether the given word is still a candidate, meaning it matches the known information about the hidden word thus far. This is \textbf{bolddd}. I want to make an inline equation that says $f(x) = \lambda ^ 2$.
+% Description of letter type
+Again, each distinct letter in a word corresponds to a \texttt{get\_letter\_t} struct, which is defined below.
+
+\begin{lstlisting}[language=C, caption=Letter Struct in "hangman.h"]
+typedef struct {
+    byte_t freq;  
+    uint pos;    
+    
+} letter_t;
+\end{lstlisting}
+
+The variable \texttt{freq} stores the number of occurrences of a letter in a word. The variable \texttt{pos} encodes the positions of a letter in a word as a sequence of ones and zeroes, indicating which positions contain that letter.
+
+The word structs are stored in a series of doubly linked lists, declared as \texttt{DLList\_t** words}, each containing words of the same length. Words that are still potential candidates for the hidden word are kept at the front of the list. In this way, no words are deleted from the lists for future use, but the candidates are still separated from the non-candidates.
+
+\subsection{Changes in Algorithms}
 
 \subsection{Additional Input: Headers}
 

@@ -16,17 +16,14 @@
 typedef unsigned char byte_t; 
 
 // statistics of a particular letter in a word
-typedef struct
-{
+typedef struct {
     byte_t freq;  // number of occurences in word
     uint pos;     // binary encoding of positions of that letter
 
 } letter_t;
 
 // encodes a word as a struct of related statistics
-typedef struct 
-
-{
+typedef struct {
 
     bool is_cand;                          // true if word is still a candidate for the hidden word
     letter_t* distinct_letters;            // array of letter structs for each distinct letter in word 
