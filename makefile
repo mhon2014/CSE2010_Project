@@ -2,7 +2,7 @@ termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
 	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 debug: src/evalHangmanPlayer.c src/hangmanPlayer.c
-	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+	gcc -ggdb -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
 
 remove: 
 	rm ./hangman
