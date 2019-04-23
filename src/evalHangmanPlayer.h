@@ -3,7 +3,7 @@
  * comment out the operating systems that you are NOT using
  **********************************************************/
 
-//#define LINUX // code01.fit.edu
+#define LINUX // code01.fit.edu
 //#define MAC_OS
 //#define WINDOWS
 //#define OTHERS
