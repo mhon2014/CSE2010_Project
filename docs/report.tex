@@ -189,8 +189,6 @@
 
 \subsection{Algorithms and Supporting Data Structures}
 
-\subsection{Additional Input: Headers}
-
 \subsection{Ideas Devised by Group}
 
 \subsection{Ideas Discussed in Course and Material}
@@ -232,11 +230,27 @@ The word structs are stored in a series of doubly linked lists, declared as \tex
 
 \subsection{Changes in Algorithms}
 
+For any given hidden word, the only linked list of interest is the one containing words of the same length as the hidden word. This significantly reduces the number of words being considered. All words in the list are initially marked as candidates, and all letters are initially marked as ``not guessed".
+
+The next guess is determined by traversing the list and determining what letter occurs in the greatest number of candidate words. The frequency for each letter is incremented for every word in which it appears. The maximum is assigned to be the largest of these frequencies, neglecting those letters that have already been guessed. The letter corresponding to the maximum frequency is the next guess, and it is marked as such.
+
+After the evaluation provides feedback on a guess, the selection of candidate words can be refined.
+%matching guess case
+%bad guess case
 \subsection{Additional Input: Headers}
+%DLL library
 
 \subsection{Ideas Devised by Group}
+% binary position encoding
+
+% mapping letter structs from 26 indices to n structs, saves space
+
+% during trimming, stop traversal when bad portion reached
+
+% only traverse bad nodes when resetting, break when good reached
 
 \subsection{Ideas Discussed in Course and Material}
+
 
 \subsection{Ideas from Other Sources}
 
