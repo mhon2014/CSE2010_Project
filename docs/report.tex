@@ -173,7 +173,7 @@
 
 % Define document title and author
 	\title{CSE2010 Term Project Spring 2019 \\ Hangman Player}
-	\author{Team: `` \texttt{Fantastic for(int i=0; i<4; i++)}" \\ Sarah Arends, Ale Escobar, Michael Hon, Josias Moukpe}
+	\author{Team: `` \texttt{Fantastic for(int i=0; i<4; i++)}" \\ Sarah Arends, Alejandra Escobar, Michael Hon, Josias Moukpe}
 	\maketitle
 
 % Write abstract here
@@ -206,7 +206,7 @@ typedef struct {
 
     bool is_cand;                         
     letter_t* distinct_letters;          
-    byte_t get_letter_t[ALPHABET_SIZE];;  
+    byte_t get_letter_t[ALPHABET_SIZE];
 
 } word_t;
 \end{lstlisting}
@@ -234,9 +234,14 @@ For any given hidden word, the only linked list of interest is the one containin
 
 The next guess is determined by traversing the list and determining what letter occurs in the greatest number of candidate words. The frequency for each letter is incremented for every word in which it appears. The maximum is assigned to be the largest of these frequencies, neglecting those letters that have already been guessed. The letter corresponding to the maximum frequency will be the next guess, and it is marked as such using a boolean array.
 
-After the evaluation provides feedback on a guess, the list of candidate words can be further refined.
+After the evaluation provides feedback on a guess, the list of candidate words can be further refined using the \texttt{elimWords} function. We traverse the list from the front in order to assess the words that are still candidates. Once the latter half of the string, containing non-candidates, is reached, there is no need to check the candidacy of the strings. Therefore, we can break from this traversal once a non-candidate is reached.
+
 %matching guess case
+In the case that the previous guess was correct, the frequency of the letter in the hidden word is first determined, using the updated string passed from the evaluation program. If the frequency in the hidden word does not match that in a candidate word, we know that word is no longer a candidate and mark it as such. Otherwise, if the words have the same frequency of the guessed letter, the encoded positions of the two strings are compared to determine if the letters occur at the same set of locations. If not, that word is no longer a candidate. Words that are still marked as candidates after this process are pushed to the front of the list, in order to maintain separation between candidates and non-candidates.
+
 %bad guess case
+A different algorithm is performed with the same \texttt{elimWords} function in the case of an incorrect guess by passing the function \texttt{is\_good = FALSE}. For this case, the candidate words are again traversed, but this time every word that contains one or more occurrences of the "bad guess" is marked as a non-candidate. If a word is still marked as a candidate after this process, it is pushed to the front of the list.
+
 \subsection{Additional Input: Headers}
 %DLL library
 
