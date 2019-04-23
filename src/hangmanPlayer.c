@@ -150,17 +150,18 @@ void feedback_hangman_player(bool is_correct_guess, char* current_word) {
   // variable declarations
   char letter = guess;                                        // letter that was guessed
   byte_t curr_word_len = strlen(current_word);                // get length of current word
-  byte_t instances = checkInHiddenWord(current_word, letter); // find revealed letter in hidden word
+  byte_t num_instances = 0;                                   // instances of letter in word, initially zero
   uint pos = getPositions(current_word, letter);              //  get encoded positions of letter in word
   
   // eliminate words that don't match the revealed letters
   if (is_correct_guess) {
-    elimWords(words[curr_word_len - 1], true, letter, instances, pos);
+    num_instances = checkInHiddenWord(current_word, letter); // update num_instances if in word
+    elimWords(words[curr_word_len - 1], true, letter, num_instances, pos);
   } 
 
   // eliminate words that contain the incorrect letter
   else {
-    elimWords(words[curr_word_len - 1], false, letter, instances, pos);
+    elimWords(words[curr_word_len - 1], false, letter, num_instances, pos);
   }
 
   return;
