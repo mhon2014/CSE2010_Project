@@ -24,8 +24,8 @@
 #include <unistd.h>
 #include <time.h>
 #include "hangmanPlayer.h"
-#include "utils/dllist.h"
-#include "utils/hangman.h"
+#include "dllist.h"
+#include "hangman.h"
 
 
 

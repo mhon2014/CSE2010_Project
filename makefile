@@ -1,8 +1,8 @@
-termProject: src/evalHangmanPlayer.c src/hangmanPlayer.c
-	gcc -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+termProject: final/evalHangmanPlayer.c final/hangmanPlayer.c
+	gcc -o hangman final/evalHangmanPlayer.c final/hangmanPlayer.c -lm
 
 debug: src/evalHangmanPlayer.c src/hangmanPlayer.c
-	gcc -ggdb -o hangman src/evalHangmanPlayer.c src/hangmanPlayer.c -lm
+	gcc -ggdb -o hangman final/evalHangmanPlayer.c final/hangmanPlayer.c -lm
 
 remove: 
 	rm ./hangman
