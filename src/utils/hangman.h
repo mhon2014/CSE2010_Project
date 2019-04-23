@@ -6,11 +6,19 @@
 #include <stdbool.h>
 #include "dllist.h"
 
+<<<<<<< HEAD
 #define NONE 255                               // "null" index indicates a letter not in word, i.e. no associated struct
 #define MAX_LENGTH 32                          // maximum string length for a word
 #define ALPHABET_SIZE 26                       // English alphabet size
 #define C2I(x) ((int)x - (int)'a')             // Hash function to map letters to indices 
 #define I2C(x) (char)((int)x + (int)'a')       // Hash function to map indices to letters
+=======
+#define NONE 255
+#define MAX_LENGTH 32 // max string length for a word
+#define ALPHABET_SIZE 26 // English alphabet size
+#define C2I(x) ((int)x - (int)'a')  // Hash function to convert letters to indices
+#define I2C(x) (char)((int)x + (int)'a') // Hash function to convert indices to letters
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 
 // a type of size 1 byte
 typedef unsigned char byte_t; 
@@ -23,8 +31,12 @@ typedef struct
 
 } letter_t;
 
+<<<<<<< HEAD
 // encodes a word as a struct of related statistics
 typedef struct 
+=======
+typedef struct
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 {
 
     bool is_cand;                          // true if word is still a candidate for the hidden word
@@ -35,8 +47,13 @@ typedef struct
 
 
 /************************************************
+<<<<<<< HEAD
  * FUNCTION PROTOTYPES 
  ***********************************************/ 
+=======
+ * PROTOTYPES
+ ***********************************************/
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 
 word_t* initWord(char* val);
 char highestFreqLetter(DLList_t  *words, ushort *letter_freq, bool* guessLetters);
@@ -45,8 +62,13 @@ byte_t charOccurrences(word_t* w, char c);
 void elimWords(DLList_t* wordList, bool flag, char bad_letter, byte_t inst, uint pos);
 byte_t checkInHiddenWord(char* word, char letter);
 void reset(DLList_t** words, byte_t size);
+<<<<<<< HEAD
 uint viableWords(DLList_t* wordlist); 
 bool isMatchingPos(word_t* w, char letter, uint pos);
+=======
+uint viableWords(DLList_t* wordlist);
+bool isMatchingPos(Word_t* w, char letter, uint pos);
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 uint getPositions(char* word, char letter);
 void resetList(DLList_t* words);
 byte_t numDistinctLetters(char* word, byte_t* letter_indices);
@@ -55,6 +77,7 @@ byte_t numDistinctLetters(char* word, byte_t* letter_indices);
  * FUNCTION IMPLEMENTATIONS
  * ****************************************************************/
 
+<<<<<<< HEAD
 // determines number of distinct letter in words,
 // assigns indices for corresponding letter structs
 byte_t numDistinctLetters(char* word, byte_t* letter_indices) {
@@ -63,6 +86,13 @@ byte_t numDistinctLetters(char* word, byte_t* letter_indices) {
     byte_t freq[26] = { 0 };  // counts number of occurences of each letter
     
     // counts occurrences of letters in word
+=======
+byte_t numDistinctLetters(char* word, byte_t* freq_indices) {
+    byte_t counter = 0;
+    byte_t tmp[26] = { 0 };
+    // byte_t pos = 0;
+
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
     for(byte_t c = 0; c < strlen(word); ++c) {
         ++freq[C2I(word[c])];
     }
@@ -75,10 +105,15 @@ byte_t numDistinctLetters(char* word, byte_t* letter_indices) {
             letter_indices[i] = counter;
             ++counter;
         }
+<<<<<<< HEAD
 
         // set associated index to "none" if not in word 
         else 
             letter_indices[i] = NONE;
+=======
+        else
+            freq_indices[i] = NONE;
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
     }
 
     return counter;
@@ -88,12 +123,21 @@ byte_t numDistinctLetters(char* word, byte_t* letter_indices) {
 // initialize a word based on data received 
 word_t* initWord(char* word) {
 
+<<<<<<< HEAD
     
     word_t* new_node = (word_t*) malloc(sizeof(word_t));                           // allocate memory for new word
     int num_letters = numDistinctLetters(word, new_node->letter_indices);          // number of distinct letters in word
     new_node->distinct_letters = (letter_t*) malloc(num_letters*sizeof(letter_t)); // allocate memory for letter structs
   
     new_node->is_cand = true; // intialize word as candidate for hidden word
+=======
+/* initialize a word based on data received */
+Word_t* initWord(char* word) {
+    Word_t* new_node = (Word_t*)malloc(sizeof(Word_t));
+
+    new_node->is_cand = true;
+    new_node->letter_freqs = (freq_t*)malloc(numDistinctLetters(word, new_node->freqs_indices)*sizeof(freq_t));
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 
     // for each letter in the word
     for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
@@ -110,6 +154,7 @@ word_t* initWord(char* word) {
 
     return new_node;
 
+<<<<<<< HEAD
 } 
 
 // encode frequency and position of each distinct letter in word 
@@ -124,6 +169,15 @@ void encode(word_t* word, char* val) {
         if (word->letter_indices[j] != NONE) {
             (word->distinct_letters[word->letter_indices[j]].freq)++;                      // increment its frequency
             word->distinct_letters[word->letter_indices[j]].pos |= (1 << (32 - char_i));   // log its position
+=======
+/* encode frequency and position of every letter in word */
+void encode(Word_t* word, char* val) {
+    for(byte_t char_i = 0; char_i < strlen(val); ++char_i) {
+        byte_t j = C2I(val[char_i]);
+        if(word->freqs_indices[j] != NONE) {
+            ++(word->letter_freqs[word->freqs_indices[j]].freq);
+            word->letter_freqs[word->freqs_indices[j]].pos |= (1 << (32 - char_i));
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
         }
 
     } // end for loop
@@ -150,11 +204,17 @@ uint getPositions(char* word, char letter) {
 }
 
 
+<<<<<<< HEAD
 // determines if letter matches certain position in a word 
 bool isMatchingPos(word_t* w, char letter, uint pos) {
 
     return ((w->distinct_letters[w->letter_indices[C2I(letter)]].pos ^ pos) == 0x00000000);
 
+=======
+/* determines if letter matches certain pos in a word */
+bool isMatchingPos(Word_t* w, char letter, uint pos) {
+    return ((w->letter_freqs[w->freqs_indices[C2I(letter)]].pos ^ pos) == 0x00000000);
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 }
 
 
@@ -243,6 +303,7 @@ byte_t charOccurrences(word_t* w, char letter) {
 
     // get index of target letter
     byte_t i = C2I(letter);
+<<<<<<< HEAD
 
     // return frequency if letter is present
     if(w->letter_indices[i] != NONE) 
@@ -256,6 +317,18 @@ byte_t charOccurrences(word_t* w, char letter) {
 
 
 // update the frequency info for letters in list of candidates, return the most frequent 
+=======
+    if(w->freqs_indices[i] != NONE)
+        return w->letter_freqs[w->freqs_indices[i]].freq;
+    else
+        return 0;
+}
+
+/*
+update the frequency spectrum of every letter in the list of candidates
+and return the most frequent
+*/
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLetters) {
 
     byte_t max = C2I('z'); // highest possible index
@@ -274,11 +347,28 @@ char highestFreqLetter(DLList_t  *wordlist, ushort *letter_freq, bool* guessLett
             // for each letter
             for (byte_t i = 0; i < ALPHABET_SIZE; ++i) {
 
+<<<<<<< HEAD
                 // check for presence
                 byte_t p = charOccurrences(temp, I2C(i));
                 // increment frequency if present
                 if( p > 0) 
                     letter_freq[i] += p;
+=======
+    for(Node_t* cursor = wordlist->head; cursor != NULL; cursor = cursor->next) {
+        Word_t *w = (Word_t*)cursor->data;
+
+        if(w->is_cand) {
+            for(byte_t i = 0; i < ALPHABET_SIZE; ++i) {
+
+                byte_t p = charPresence(w, I2C(i));
+                if( p > 0) {
+                    letter_freq[i] += p;
+
+                }
+            }
+        } else break;
+    }
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
 
             } // end loop over letters
 
@@ -322,6 +412,7 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
         // if is good letter
         if(is_good) {
 
+<<<<<<< HEAD
             // if word doesn't have correct frequency of letter, or not in matching positions
             if(charOccurrences(temp, letter) != inst || !isMatchingPos(temp, letter, pos)) {
                 // mark as not a candidate
@@ -351,6 +442,30 @@ void elimWords(DLList_t* wordlist, bool is_good, char letter, byte_t inst, uint 
             else if (temp->is_cand) {
                     pushfront(wordlist, temp);
                     removFromList(wordlist, current);
+=======
+            if(charPresence(w, letter) != inst || !isMatchingPos(w, letter, pos)) {
+                w->is_cand = false;
+            }
+            else { // is candidate
+
+                if(w->is_cand) {
+                    pushfront(wordlist, w);
+                    removFromList(wordlist, cursor);
+                }
+            }
+        }
+        else { // is bad letter
+            byte_t w_inst = charPresence(w, letter);
+            if(charPresence(w, letter) > 0) {
+                w->is_cand = false;
+            }
+            else { // is candidate
+
+                if(w->is_cand) {
+                    pushfront(wordlist, w);
+                    removFromList(wordlist, cursor);
+                }
+>>>>>>> cfab0a44dfbba6eb73c4eaa327e70448fcb60539
             }
         }
     }
